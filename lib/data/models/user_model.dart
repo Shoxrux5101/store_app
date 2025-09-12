@@ -9,10 +9,10 @@ class UserModel {
     required this.password,
   });
 
-  factory UserModel.toJson(Map<String, dynamic> json) => UserModel(
-    fullName: json['fullName'] as String? ?? '',
-    email: json['email'] as String? ?? '',
-    password: json['password'] as String? ?? '',
+  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
+    fullName: json['fullName'] ?? '',
+    email: json['email'] ?? '',
+    password: json['password'] ?? '',
   );
 
   Map<String, dynamic> toJson() => {
