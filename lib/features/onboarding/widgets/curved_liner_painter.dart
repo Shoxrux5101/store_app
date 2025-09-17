@@ -16,7 +16,7 @@ class CurvedLinesPainter extends CustomPainter {
         size.width * 0.4,
         0.0 + i * 25,
         size.width,
-        300.0 + i * 45,
+        400.0 + i * 45,
       );
       canvas.drawPath(path, paint);
     }

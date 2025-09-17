@@ -8,66 +8,76 @@ class AuthViewModel extends ChangeNotifier {
   AuthViewModel({required AuthRepository repository})
       : _repository = repository;
 
-  bool isLoading = false;
-  String? error;
-  dynamic data;
+  bool _isLoading = false;
+  String? _error;
+  dynamic _data;
 
-  void _setLoading(bool value) {
-    isLoading = value;
+  bool get isLoading => _isLoading;
+  String? get error => _error;
+  dynamic get data => _data;
+
+  void _startRequest() {
+    _isLoading = true;
+    _error = null;
     notifyListeners();
   }
 
-  void _setError(String? message) {
-    error = message;
+  void _finishRequest({String? error, dynamic data}) {
+    _isLoading = false;
+    _error = error;
+    _data = data;
     notifyListeners();
   }
 
   Future<void> register(UserModel user) async {
-    _setLoading(true);
-    error = null;
-
+    _startRequest();
     final result = await _repository.register(user);
     result.fold(
-          (err) => _setError(err.toString()),
-          (success) {
-        data = success;
-        notifyListeners();
-      },
+          (err) => _finishRequest(error: err.toString()),
+          (success) => _finishRequest(data: success),
     );
-
-    _setLoading(false);
   }
 
   Future<void> login(String email, String password) async {
-    _setLoading(true);
-    error = null;
-
+    _startRequest();
     final result = await _repository.login(email, password);
     result.fold(
-          (err) => _setError(err.toString()),
-          (success) {
-        data = success;
-        notifyListeners();
-      },
+          (err) => _finishRequest(error: err.toString()),
+          (success) => _finishRequest(data: success),
     );
-
-    _setLoading(false);
   }
 
   Future<void> forgetPassword(String email) async {
-    _setLoading(true);
-    error = null;
-
+    _startRequest();
     final result = await _repository.forgetPassword(email);
     result.fold(
-          (err) => _setError(err.toString()),
-          (success) {
-        data = success;
-        notifyListeners();
-      },
+          (err) => _finishRequest(error: err.toString()),
+          (success) => _finishRequest(data: success),
     );
-
-    _setLoading(false);
   }
 
+  Future<void> sendOtp(String email) async {
+    _startRequest();
+    final result = await _repository.sendOtp(email);
+    result.fold(
+          (err) => _finishRequest(error: err.toString()),
+          (success) => _finishRequest(data: success),
+    );
+  }
+
+  Future<void> verifyOtp(String email, String otp) async {
+    _startRequest();
+    final result = await _repository.verifyOtp(email, otp);
+    result.fold(
+          (err) => _finishRequest(error: err.toString()),
+          (success) => _finishRequest(data: success),
+    );
+  }
+
+
+  void clearData() {
+    _data = null;
+    _error = null;
+    notifyListeners();
+  }
 }

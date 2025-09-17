@@ -1,5 +1,3 @@
-
-
 import '../../core/network/api_client.dart';
 import '../../core/utils/result.dart';
 import '../models/user_model.dart';
@@ -10,7 +8,7 @@ class AuthRepository {
 
   Future<Result> register(UserModel user) async {
     final response = await _dioClient.post(
-      "/sign-up",
+      "/auth/register",
       data: user.toJson(),
     );
     return response.fold(
@@ -41,10 +39,21 @@ class AuthRepository {
     );
   }
 
-  Future<Result> otpCode(String code) async {
+  Future<Result> sendOtp(String email) async {
     final response = await _dioClient.post(
-      "/otp-code",
-      data: {"code": code},
+      "/auth/send-otp",
+      data: {"email": email},
+    );
+    return response.fold(
+          (error) => Result.error(error),
+          (success) => Result.ok(success),
+    );
+  }
+
+  Future<Result> verifyOtp(String email, String otp) async {
+    final response = await _dioClient.post(
+      "/auth/verify-otp",
+      data: {"email": email, "otp": otp},
     );
     return response.fold(
           (error) => Result.error(error),

@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:strore_app/core/routes/router.dart';
+import 'package:strore_app/core/routes/routes.dart';
 
 
 class AuthInterceptor extends Interceptor {
@@ -7,7 +9,7 @@ class AuthInterceptor extends Interceptor {
 
   final FlutterSecureStorage secureStorage;
   final dio = Dio(
-    BaseOptions(baseUrl: 'http://192.168.0.101:8888/api/v1',validateStatus: (status) => true),
+    BaseOptions(baseUrl: 'http://192.168.9.61:8888/api/v1',validateStatus: (status) => true),
   );
 
   @override
@@ -55,7 +57,7 @@ class AuthInterceptor extends Interceptor {
     await secureStorage.delete(key: 'token');
     await secureStorage.delete(key: 'login');
     await secureStorage.delete(key: 'password');
-    // AppRouter.router.go(Routes.loginPage);
+    //AppRouter.router.go(Routes.loginPage);
     return;
   }
 
