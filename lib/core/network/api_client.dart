@@ -6,7 +6,7 @@ class ApiClient {
   ApiClient({required this.interceptor}){
     _dio = Dio(
       BaseOptions(
-        baseUrl: "http://192.168.0.104:8888/api/v1",
+        baseUrl: "http://192.168.0.102:8888/api/v1",
         connectTimeout: Duration(seconds: 5),
         receiveTimeout: Duration(seconds: 5),
         validateStatus: (status) => true,
@@ -39,7 +39,7 @@ class ApiClient {
   Future<Result<T>> post<T>(String path, {required Map<String, dynamic> data}) async {
     try {
       var response = await _dio.post(path, data: data);
-      if (response.statusCode != 200 && response.statusCode != 201) {
+      if (response.statusCode == null || response.statusCode! < 200 || response.statusCode! >= 300) {
         return Result.error(Exception(response.data.toString()));
       }
       return Result.ok(response.data as T);

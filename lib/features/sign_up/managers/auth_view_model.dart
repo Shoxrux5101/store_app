@@ -56,18 +56,26 @@ class AuthViewModel extends ChangeNotifier {
     );
   }
 
-  Future<void> sendOtp(String email) async {
+  // Future<void> sendOtp(String email) async {
+  //   _startRequest();
+  //   final result = await _repository.sendOtp(email);
+  //   result.fold(
+  //         (err) => _finishRequest(error: err.toString()),
+  //         (success) => _finishRequest(data: success),
+  //   );
+  // }
+
+  Future<void> verifyOtp(String email, String otp) async {
     _startRequest();
-    final result = await _repository.sendOtp(email);
+    final result = await _repository.verifyOtp(email, otp);
     result.fold(
           (err) => _finishRequest(error: err.toString()),
           (success) => _finishRequest(data: success),
     );
   }
-
-  Future<void> verifyOtp(String email, String otp) async {
+  Future<void> resetPassword(String email, String otp, String newPassword) async {
     _startRequest();
-    final result = await _repository.verifyOtp(email, otp);
+    final result = await _repository.resetPassword(email, otp, newPassword);
     result.fold(
           (err) => _finishRequest(error: err.toString()),
           (success) => _finishRequest(data: success),

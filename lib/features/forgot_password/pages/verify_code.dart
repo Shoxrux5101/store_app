@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class VerifyCode extends StatefulWidget {
@@ -21,8 +22,7 @@ class _VerifyCodeState extends State<VerifyCode> {
     super.dispose();
   }
 
-  void _onVerify() {
-    // barcha raqamlarni birlashtiramiz
+  void _onVerify() async {
     final code = controllers.map((c) => c.text).join();
     if (code.length < 4) {
       ScaffoldMessenger.of(context)
@@ -30,13 +30,18 @@ class _VerifyCodeState extends State<VerifyCode> {
       return;
     }
 
-    // bu yerda API ga so'rov yuborishingiz mumkin:
-    print("Email: ${widget.email}, Code: $code");
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Tasdiqlash: $code, Email: ${widget.email}")),
+    final response = await Dio().post(
+      'http://192.168.0.104:8888/api/v1/auth/reset-password/verify',
+      data: {'email': widget.email, 'code': code},
     );
+
+    if (response.statusCode == 200) {
+      print("muvaffaqiyatli");
+    } else {
+      print('xatolik');
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +59,7 @@ class _VerifyCodeState extends State<VerifyCode> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text("Enter the 4-digit code",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.w500)),
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

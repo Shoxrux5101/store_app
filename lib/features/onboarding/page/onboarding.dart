@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:strore_app/features/onboarding/widgets/button_onboarding.dart';
+
+import '../widgets/button_onboarding.dart';
 
 class Onboarding extends StatelessWidget {
   const Onboarding({super.key});

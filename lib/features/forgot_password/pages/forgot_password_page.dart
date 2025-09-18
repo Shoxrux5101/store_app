@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:strore_app/core/routes/routes.dart';
-import 'package:strore_app/features/forgot_password/pages/verify_code.dart';
+import 'package:store_app/features/forgot_password/pages/verify_code.dart';
 import '../../sign_up/managers/auth_view_model.dart';
 import '../../sign_up/widgets/custom_text_form_field.dart';
 
@@ -29,7 +27,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     if (email.isEmpty) return;
 
     final authVM = Provider.of<AuthViewModel>(context, listen: false);
-    await authVM.sendOtp(email);
+    await authVM.forgetPassword(email);
 
     if (authVM.error == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -42,6 +40,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         ),
       );
     } else {
+      print("error: ${authVM.data}");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Xatolik: ${authVM.error}')),
       );

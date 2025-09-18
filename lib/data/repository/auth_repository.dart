@@ -19,8 +19,22 @@ class AuthRepository {
 
   Future<Result> login(String email, String password) async {
     final response = await _dioClient.post(
-      "/login",
-      data: {"email": email, "password": password},
+      "/auth/login",
+      data: {"login": email, "password": password},
+    );
+    return response.fold(
+          (error) => Result.error(error),
+          (success) => Result.ok(success),
+    );
+  }
+  Future<Result> resetPassword(String email, String otp, String newPassword) async {
+    final response = await _dioClient.post(
+      "/auth/reset-password/reset",
+      data: {
+        "login": email,
+        "otp": otp,
+        "newPassword": newPassword
+      },
     );
     return response.fold(
           (error) => Result.error(error),
@@ -30,8 +44,8 @@ class AuthRepository {
 
   Future<Result> forgetPassword(String email) async {
     final response = await _dioClient.post(
-      "/forget-password",
-      data: {"email": email},
+      "/auth/reset-password/email",
+      data: {"login": email},
     );
     return response.fold(
           (error) => Result.error(error),
@@ -39,10 +53,10 @@ class AuthRepository {
     );
   }
 
-  Future<Result> sendOtp(String email) async {
+  Future<Result> verify(String email) async {
     final response = await _dioClient.post(
-      "/auth/send-otp",
-      data: {"email": email},
+      "/auth/reset-password/verify",
+      data: {"login": email},
     );
     return response.fold(
           (error) => Result.error(error),
@@ -52,8 +66,8 @@ class AuthRepository {
 
   Future<Result> verifyOtp(String email, String otp) async {
     final response = await _dioClient.post(
-      "/auth/verify-otp",
-      data: {"email": email, "otp": otp},
+      "/auth/reset-password/reset",
+      data: {"login": email, "otp": otp},
     );
     return response.fold(
           (error) => Result.error(error),

@@ -6,27 +6,29 @@ enum Status { idle, loading, success, error }
 class HomeState extends Equatable {
   final Status status;
   final List<CategoryModel> categories;
-  final String? errorMassage;
+  final String? errorMessage;
 
-  HomeState({
+  const HomeState({
     required this.status,
     required this.categories,
-    required this.errorMassage,
+    required this.errorMessage,
   });
 
   factory HomeState.initial() =>
-      HomeState(status: Status.idle, categories: [], errorMassage: null);
+      const HomeState(status: Status.idle, categories: [], errorMessage: null);
 
   HomeState copyWith({
-    String? errorMassage,
     Status? status,
     List<CategoryModel>? categories,
-  }) => HomeState(
-    status: status ?? this.status,
-    categories: categories ?? this.categories,
-    errorMassage: errorMassage ?? this.errorMassage,
-  );
+    String? errorMessage,
+  }) {
+    return HomeState(
+      status: status ?? this.status,
+      categories: categories ?? this.categories,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [status, categories, errorMessage];
 }

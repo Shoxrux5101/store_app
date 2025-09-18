@@ -1,19 +1,30 @@
-// import 'package:bloc/bloc.dart';
-// import '../../../data/repository/category_repository.dart';
-// import 'home_state.dart';
-//
-// class CategoryCubit extends Cubit<HomeState> {
-//   final CategoryRepository repository;
-//
-//   CategoryCubit(this.repository) : super(CategoryInitial());
-//
-//   Future<void> fetchCategories() async {
-//     emit(CategoryLoading());
-//     try {
-//       final categories = await repository.getCategories();
-//       emit(CategoryLoaded(categories as List));
-//     } catch (e) {
-//       emit(HomeError(e.toString()));
-//     }
-//   }
-// }
+import 'package:bloc/bloc.dart';
+import '../../../data/repository/category_repository.dart';
+import 'home_state.dart';
+
+class HomeCubit extends Cubit<HomeState> {
+  final CategoryRepository repository;
+
+  HomeCubit(this.repository) : super(HomeState.initial());
+
+  Future<void> fetchCategories() async {
+    emit(state.copyWith(status: Status.loading));
+
+    final result = await repository.getCategories();
+
+    result.fold(
+          (error) {
+        emit(state.copyWith(
+          status: Status.error,
+          errorMessage: error.toString(),
+        ));
+      },
+          (data) {
+        emit(state.copyWith(
+          status: Status.success,
+          categories: data,
+        ));
+      },
+    );
+  }
+}

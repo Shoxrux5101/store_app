@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:strore_app/features/sign_up/widgets/already_have_account.dart';
-import 'package:strore_app/features/sign_up/widgets/custom_text_form_field.dart';
-import 'package:strore_app/data/models/user_model.dart';
 import '../../../core/routes/routes.dart';
+import '../../../data/models/user_model.dart';
 import '../managers/auth_view_model.dart';
+import '../widgets/already_have_account.dart';
+import '../widgets/custom_text_form_field.dart';
 import '../widgets/social_section.dart';
 
 class SignUp extends StatefulWidget {
@@ -81,7 +80,6 @@ class _SignUpState extends State<SignUp> {
       );
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

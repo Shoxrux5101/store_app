@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:strore_app/core/dependencies.dart';
-import 'package:strore_app/core/routes/router.dart';
+import 'core/dependencies.dart';
+import 'core/routes/router.dart';
 
 
 void main() {
