@@ -66,7 +66,6 @@ class ProductsGridWidget extends StatelessWidget {
       ),
     );
   }
-
   Widget _buildProductsGrid(ProductState productState) {
     return GridView.builder(
       padding: const EdgeInsets.only(bottom: 20),

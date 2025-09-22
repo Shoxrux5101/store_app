@@ -1,15 +1,20 @@
 import 'package:go_router/go_router.dart';
 import 'package:store_app/core/routes/routes.dart';
+import 'package:store_app/features/account/pages/account_page.dart';
+import 'package:store_app/features/card/pages/card_page.dart';
+import 'package:store_app/features/saved/pages/saved_page.dart';
+import 'package:store_app/features/search/pages/search_page.dart';
 import '../../features/forgot_password/pages/forgot_password_page.dart';
 import '../../features/home/pages/home_page.dart';
 import '../../features/login/pages/login_page.dart';
+import '../../features/notification/pages/notification_page.dart';
 import '../../features/onboarding/page/onboarding.dart';
 import '../../features/onboarding/page/splash.dart';
 import '../../features/sign_up/pages/sign_up.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: Routes.homePage,
+    initialLocation: Routes.splash,
     routes: [
       GoRoute(path: Routes.splash,
           builder: (context,state) {
@@ -40,6 +45,31 @@ class AppRouter {
       GoRoute(path: Routes.homePage,
         builder: (context, state) {
         return HomePage();
+        }
+      ),
+      GoRoute(path: Routes.searchPage,
+          builder: (context, state) {
+            return SearchPage();
+          }
+      ),
+      GoRoute(path: Routes.savedPage,
+          builder: (context, state) {
+            return SavedPage();
+          }
+      ),
+      GoRoute(path: Routes.cartPage,
+          builder: (context, state) {
+            return CardPage();
+          }
+      ),
+      GoRoute(path: Routes.accountPage,
+          builder: (context, state) {
+            return AccountPage();
+          }
+      ),
+      GoRoute(path: Routes.notification,
+        builder: (context, state) {
+        return NotificationPage();
         }
       ),
     ],

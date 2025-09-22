@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:store_app/core/routes/routes.dart';
 import '../../../core/authInterceptor.dart';
 import '../../../core/network/api_client.dart';
 import '../../../data/repository/category_repository.dart';
@@ -13,8 +15,23 @@ import '../widgets/custom_bottom_nav_bar.dart';
 import '../widgets/products_grid_widget.dart';
 import '../widgets/search_bar_widget.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _currentIndex = 0;
+
+  final List<String> _routes = [
+    Routes.homePage,
+    Routes.searchPage,
+    Routes.savedPage,
+    Routes.cartPage,
+    Routes.accountPage,
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -46,22 +63,31 @@ class HomePage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.white,
           title: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Discover",style: TextStyle(fontSize: 32,fontWeight: FontWeight.w500,),),
-                IconButton(onPressed: (){}, icon: SvgPicture.asset("assets/icons/Bell.svg")),
+                const Text(
+                  "Discover",
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {context.push(Routes.notification);},
+                  icon: SvgPicture.asset("assets/icons/Bell.svg"),
+                ),
               ],
             ),
           ),
         ),
         body: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
-            children: [
+            children: const [
               SearchBarWidget(),
               SizedBox(height: 16),
               CategoryTabsWidget(),
@@ -71,8 +97,13 @@ class HomePage extends StatelessWidget {
           ),
         ),
         bottomNavigationBar: CustomBottomNavBar(
-          currentIndex: 0,
-          onTap: (index) {},
+          currentIndex: _currentIndex,
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+            context.go(_routes[index]);
+          },
         ),
       ),
     );

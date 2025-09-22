@@ -2,6 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:store_app/data/repository/notification_repository.dart';
+import 'package:store_app/features/notification/managers/notification_bloc.dart';
 import '../../data/repository/auth_repository.dart';
 import '../../data/repository/category_repository.dart';
 import '../../features/sign_up/managers/auth_view_model.dart';
@@ -16,5 +18,7 @@ final dependencies = <SingleChildWidget>[
 
   Provider(
     create: (context) => CategoryRepository(apiClient: ApiClient(interceptor: AuthInterceptor(secureStorage: const FlutterSecureStorage(),),),),),
+  Provider(create: (context) => NotificationRepository(apiClient: ApiClient(interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage())))),
   BlocProvider(create: (context) => HomeCubit(context.read<CategoryRepository>())),
+  BlocProvider(create: (context) => NotificationBloc(context.read<NotificationRepository>(),)..add(NotificationEventFetch())),
 ];
