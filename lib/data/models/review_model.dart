@@ -1,0 +1,25 @@
+class ReviewModel {
+  final int id;
+  final String comment;
+  final int rating;
+  final DateTime created;
+  final String userFullName;
+
+  ReviewModel({
+    required this.id,
+    required this.comment,
+    required this.rating,
+    required this.created,
+    required this.userFullName,
+  });
+
+  factory ReviewModel.fromJson(Map<String, dynamic> json) {
+    return ReviewModel(
+      id: json['id'] as int,
+      comment: json['comment'] as String,
+      rating: json['rating'] as int,
+      created: DateTime.parse(json['created'] as String),
+      userFullName: json['userFullName'] as String,
+    );
+  }
+}

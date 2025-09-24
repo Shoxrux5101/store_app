@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../data/models/product_model.dart';
+import '../../product_details/pages/product_detail_page.dart';
 import '../managers/product_cubit.dart';
 import '../managers/product_state.dart';
 
@@ -78,10 +79,21 @@ class ProductsGridWidget extends StatelessWidget {
       itemCount: productState.filterProducts.length,
       itemBuilder: (context, index) {
         final product = productState.filterProducts[index];
-        return ProductCard(product: product);
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProductDetailPage(productId: product.id),
+              ),
+            );
+          },
+          child: ProductCard(product: product),
+        );
       },
     );
   }
+
 
   Widget _buildErrorState(BuildContext context, ProductState productState) {
     return Center(

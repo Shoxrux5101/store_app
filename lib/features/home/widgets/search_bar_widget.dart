@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../managers/product_cubit.dart';
 
 class SearchBarWidget extends StatelessWidget {
-  const SearchBarWidget({Key? key}) : super(key: key);
+  const SearchBarWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

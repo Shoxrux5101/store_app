@@ -10,4 +10,6 @@ class Routes {
   static String cartPage = '/cart';
   static String accountPage = '/account';
   static String notification = '/notification';
+  static String productDetail = '/detail';
+  static String reviewPage = '/reviewPage';
 }

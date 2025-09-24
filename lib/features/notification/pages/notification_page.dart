@@ -1,12 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:store_app/features/home/widgets/custom_bottom_nav_bar.dart';
+import '../../../core/routes/routes.dart';
 import '../managers/notification_bloc.dart';
 import '../managers/notification_state.dart';
 
-class NotificationPage extends StatelessWidget {
+class NotificationPage extends StatefulWidget {
   const NotificationPage({super.key});
 
+  @override
+  State<NotificationPage> createState() => _NotificationPageState();
+}
+
+class _NotificationPageState extends State<NotificationPage> {
+  int _currentIndex = 0;
+
+  final List<String> _routes = [
+    Routes.homePage,
+    Routes.searchPage,
+    Routes.savedPage,
+    Routes.cartPage,
+    Routes.accountPage,
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,6 +69,7 @@ class NotificationPage extends StatelessWidget {
                       child: Column(
                         children: [
                           SvgPicture.asset("assets/icons/Bell.svg",width: 64,height: 64,),
+                          SizedBox(height: 24,),
                           const Text("You haven’t gotten any notifications yet!",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600,),maxLines: 2,),
                           Text('We’ll alert you when something cool happens.',style: TextStyle(fontWeight: FontWeight.w400,fontSize: 16,),maxLines: 2,)
                         ],
@@ -101,6 +119,15 @@ class NotificationPage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+          context.go(_routes[index]);
+        },
       ),
     );
   }

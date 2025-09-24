@@ -71,7 +71,6 @@ class CategoryTabsWidget extends StatelessWidget {
               },
             );
           }
-
           return const SizedBox();
         },
       ),
