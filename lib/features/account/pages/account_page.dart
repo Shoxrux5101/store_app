@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:store_app/features/account/pages/my_orders.dart';
-import 'package:store_app/features/account/widgets/accoutn_item.dart';
+import 'package:store_app/features/account/widgets/account_item.dart';
 import 'package:store_app/features/account/widgets/logout_dialog.dart';
 import 'package:store_app/features/home/widgets/custom_bottom_nav_bar.dart';
 
 import '../../../core/routes/routes.dart';
 import '../../help_center/page/help_center.dart';
 import '../../my_details/pages/my_details.dart';
+import 'notifications_settings_page.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -132,10 +133,10 @@ class _AccountPageState extends State<AccountPage> {
                   iconPath: 'assets/icons/account-bell.svg',
                   title: "Notifications",
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => MyDetails()),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => NotificationSettingsPage()),
+                    );
                   },
                 ),
               ],
