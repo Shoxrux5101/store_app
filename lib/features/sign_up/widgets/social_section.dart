@@ -24,7 +24,7 @@ class SocialSection extends StatelessWidget {
         const SizedBox(height: 24),
         Row(
           children: [
-            Container(width: 160, height: 1, color: const Color(0xFFE6E6E6)),
+            Container(width: 147, height: 1, color: const Color(0xFFE6E6E6)),
             const SizedBox(width: 10),
             const Text(
               "Or",
@@ -35,7 +35,7 @@ class SocialSection extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            Container(width: 160, height: 1, color: const Color(0xFFE6E6E6)),
+            Container(width: 146, height: 1, color: const Color(0xFFE6E6E6)),
           ],
         ),
         const SizedBox(height: 24),

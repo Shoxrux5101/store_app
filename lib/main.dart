@@ -1,11 +1,19 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'core/dependencies.dart';
 import 'core/routes/router.dart';
+import 'firebase_options.dart';
 
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  final token = await FirebaseMessaging.instance.getToken();
+  await FirebaseMessaging.instance.requestPermission();
+  print("Token: ${token}");
   runApp(const MyApp());
 }
 

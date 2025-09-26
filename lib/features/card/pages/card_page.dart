@@ -26,6 +26,11 @@ class _CardPageState extends State<CardPage> {
     Routes.cartPage,
     Routes.accountPage,
   ];
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = 3;
+  }
 
   @override
   Widget build(BuildContext context) {

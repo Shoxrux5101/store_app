@@ -7,11 +7,14 @@ import 'package:store_app/data/repository/notification_repository.dart';
 import 'package:store_app/data/repository/product_detail_repository.dart';
 import 'package:store_app/data/repository/product_repository.dart';
 import 'package:store_app/data/repository/review_repository.dart';
+import 'package:store_app/data/repository/saved_repository.dart';
 import 'package:store_app/features/card/managers/card_bloc.dart';
 import 'package:store_app/features/card/managers/card_event.dart';
 import 'package:store_app/features/notification/managers/notification_bloc.dart';
 import 'package:store_app/features/product_details/managers/product_detail_bloc.dart';
 import 'package:store_app/features/review/managers/review_bloc.dart';
+import 'package:store_app/features/saved/managers/saved_bloc.dart';
+import 'package:store_app/features/saved/managers/saved_event.dart';
 import '../../data/repository/auth_repository.dart';
 import '../../data/repository/category_repository.dart';
 import '../../features/sign_up/managers/auth_view_model.dart';
@@ -31,6 +34,7 @@ final dependencies = <SingleChildWidget>[
   Provider(create: (context) => ProductDetailRepository(apiClient: ApiClient(interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage())))),
   Provider(create: (context) => ReviewRepository(apiClient: ApiClient(interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage())))),
   Provider(create: (context) => CardRepository(apiClient: ApiClient(interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage())))),
+  Provider(create: (context) => SavedRepository(apiClient: ApiClient(interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage())))),
 
 
 
@@ -38,7 +42,8 @@ final dependencies = <SingleChildWidget>[
   BlocProvider(create: (context) => NotificationBloc(context.read<NotificationRepository>(),)..add(NotificationEventFetch())),
   BlocProvider(create: (context) => ReviewBloc(repository: context.read<ReviewRepository>())),
   BlocProvider(create: (context) => ProductDetailBloc(repository: context.read<ProductDetailRepository>(),),),
-  BlocProvider(create: (context) => CardBloc(repository: context.read<CardRepository>())..add(LoadCards()))
+  BlocProvider(create: (context) => CardBloc(repository: context.read<CardRepository>())..add(LoadCards())),
+  BlocProvider(create: (context) => SavedBloc(repository: context.read<SavedRepository>())..add(LoadSavedItems())),
 
 
 

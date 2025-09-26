@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1031096379397",
+    "project_id": "store-app-project-68b2c",
+    "storage_bucket": "store-app-project-68b2c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1031096379397:android:419a4672fbf3122124d46c",
+        "android_client_info": {
+          "package_name": "com.example.strore_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAl5PpR-B-qa6qVXW1_sUDr3le7z4MDzHE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
