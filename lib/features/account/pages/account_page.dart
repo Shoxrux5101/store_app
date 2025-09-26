@@ -4,9 +4,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:store_app/features/account/pages/my_orders.dart';
 import 'package:store_app/features/account/widgets/accoutn_item.dart';
+import 'package:store_app/features/account/widgets/logout_dialog.dart';
 import 'package:store_app/features/home/widgets/custom_bottom_nav_bar.dart';
 
 import '../../../core/routes/routes.dart';
+import '../../help_center/page/help_center.dart';
 import '../../my_details/pages/my_details.dart';
 
 class AccountPage extends StatefulWidget {
@@ -158,30 +160,31 @@ class _AccountPageState extends State<AccountPage> {
                   iconPath: 'assets/icons/Headphones.svg',
                   title: "Help Center",
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => MyDetails()),
-                    // );
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> HelpCenterPage()));
                   },
                 ),
               ],
             ),
           ),
           Divider(thickness: 8,color:Colors.grey[300]),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  spacing: 16,
-                  children: [
-                    SvgPicture.asset('assets/icons/Logout.svg',width: 24,height: 24,),
-                    Text("Logout",style: TextStyle(color: Colors.red,fontWeight: FontWeight.w400,fontSize: 16),),
-                  ],
-                ),
-                Icon(Icons.arrow_forward_ios, color: Colors.grey[500], size: 16),
-              ],
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: (){LogoutDialog.show(context);},
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    spacing: 16,
+                    children: [
+                      SvgPicture.asset('assets/icons/Logout.svg',width: 24,height: 24,),
+                      Text("Logout",style: TextStyle(color: Colors.red,fontWeight: FontWeight.w400,fontSize: 16),),
+                    ],
+                  ),
+                  Icon(Icons.arrow_forward_ios, color: Colors.grey[500], size: 16),
+                ],
+              ),
             ),
           ),
         ],

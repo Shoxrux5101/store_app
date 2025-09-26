@@ -111,7 +111,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      // Handle account creation
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Account created successfully!'),
