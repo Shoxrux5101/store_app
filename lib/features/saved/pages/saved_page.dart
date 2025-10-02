@@ -50,6 +50,7 @@ class _SavedPageState extends State<SavedPage> {
       body: BlocBuilder<SavedBloc, SavedState>(
         builder: (context, state) {
           if (state is SavedLoading) {
+            print(state);
             return const Center(child: CircularProgressIndicator());
           } else if (state is SavedLoaded) {
             return GridView.builder(
@@ -110,14 +111,23 @@ class _SavedPageState extends State<SavedPage> {
                     const SizedBox(height: 8),
                     Text(
                       item.title,
-                      style: const TextStyle(fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    Text("\$ ${item.price}"),
+                    Text(
+                      "\$ ${item.price}",
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black87,
+                      ),
+                    ),
                   ],
                 );
               },
+
             );
           } else if (state is SavedError) {
             return Center(child: Text(state.message));

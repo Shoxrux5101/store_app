@@ -1,78 +1,92 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../managers/home_cubit.dart';
-import '../managers/home_state.dart';
-import '../managers/product_cubit.dart';
-import '../managers/product_state.dart';
+
+import '../../../data/models/category_model.dart';
+import '../managers/category_cubit.dart';
+
 
 class CategoryTabsWidget extends StatelessWidget {
-  const CategoryTabsWidget({Key? key}) : super(key: key);
+  const CategoryTabsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 40,
-      child: BlocBuilder<HomeCubit, HomeState>(
-        builder: (context, categoryState) {
-          if (categoryState.status == Status.loading) {
-            return const Center(child: CupertinoActivityIndicator());
-          }
-
-          if (categoryState.status == Status.success) {
-            return BlocBuilder<ProductCubit, ProductState>(
-              builder: (context, productState) {
-                return ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: categoryState.categories.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index == 0) {
-                      return Container(
-                        margin: const EdgeInsets.only(right: 12),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            context.read<ProductCubit>().fetchProducts();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: productState.selectedCategoryId == null ? Colors.black : Colors.white,
-                            foregroundColor: productState.selectedCategoryId == null ? Colors.white : Colors.black,
-                            side: productState.selectedCategoryId == null ? null : const BorderSide(color: Colors.grey),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          child: const Text("All"),
-                        ),
-                      );
-                    }
-
-                    final category = categoryState.categories[index - 1];
-                    final isSelected = productState.selectedCategoryId == category.id;
-
-                    return Container(
-                      margin: const EdgeInsets.only(right: 12),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          context.read<ProductCubit>().filterByCategory(category.id);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: isSelected ? Colors.black : Colors.white,
-                          foregroundColor: isSelected ? Colors.white : Colors.black,
-                          side: isSelected ? null : const BorderSide(color: Colors.grey),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: Text(category.title),
-                      ),
-                    );
+    return BlocBuilder<CategoryCubit, CategoryState>(
+      builder: (context, state) {
+        if (state.status == CategoryStatus.loading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (state.status == CategoryStatus.error) {
+          return Center(child: Text('Xato: ${state.errorMessage}'));
+        }
+        if (state.categories.isEmpty) {
+          return const SizedBox.shrink();
+        }
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: SizedBox(
+            height: 40,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              itemCount: state.categories.length,
+              itemBuilder: (context, index) {
+                final category = state.categories[index];
+                print(category);
+                return _CategoryTabButton(
+                  category: category,
+                  isSelected: category.id == state.selectedCategoryId,
+                  onPressed: () {
+                    context.read<CategoryCubit>().selectCategory(category.id);
                   },
                 );
               },
-            );
-          }
-          return const SizedBox();
-        },
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _CategoryTabButton extends StatelessWidget {
+  final CategoryModel category;
+  final bool isSelected;
+  final VoidCallback onPressed;
+
+  const _CategoryTabButton({
+    required this.category,
+    required this.isSelected,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final backgroundColor = isSelected ? Colors.black : Colors.white;
+    final textColor = isSelected ? Colors.white : Colors.grey[800];
+    final borderColor = isSelected ? Colors.black : Colors.grey[300];
+
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0),
+      child: OutlinedButton(
+        onPressed: onPressed,
+        style: OutlinedButton.styleFrom(
+          backgroundColor: backgroundColor,
+          foregroundColor: textColor,
+          side: BorderSide(color: borderColor!, width: 1.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          elevation: 0,
+        ),
+        child: Text(
+          category.title,
+          style: TextStyle(
+            color: textColor,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            fontSize: 14,
+          ),
+        ),
       ),
     );
   }

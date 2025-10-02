@@ -9,11 +9,11 @@ import 'firebase_options.dart';
 
 
 void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  final token = await FirebaseMessaging.instance.getToken();
-  await FirebaseMessaging.instance.requestPermission();
-  print("Token: ${token}");
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // final token = await FirebaseMessaging.instance.getToken();
+  // await FirebaseMessaging.instance.requestPermission();
+  //print("Token: ${token}");
   runApp(const MyApp());
 }
 

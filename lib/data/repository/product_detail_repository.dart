@@ -19,7 +19,7 @@ class ProductDetailRepository {
           final product = ProductDetailModel.fromJson(data);
           return Result.ok(product);
         } catch (e) {
-          return Result.error(Exception("Failed to parse product detail: $e"));
+          return Result.error(Exception(e));
         }
       },
     );

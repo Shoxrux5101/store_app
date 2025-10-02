@@ -1,7 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:store_app/features/home/managers/product_state.dart';
 import '../../../data/repository/product_repository.dart';
 import '../../../data/models/product_model.dart';
-import 'product_state.dart';
+
 
 class ProductCubit extends Cubit<ProductState> {
   final ProductRepository repository;
@@ -23,7 +24,7 @@ class ProductCubit extends Cubit<ProductState> {
           (products) {
         emit(state.copyWith(
           status: ProductStatus.success,
-          product: products,
+          products: products,
           filterProducts: products,
           clearError: true,
         ));
@@ -32,17 +33,17 @@ class ProductCubit extends Cubit<ProductState> {
   }
 
   Future<void> filterByCategory(int? categoryId) async {
-    emit(state.copyWith(status: ProductStatus.loading));
-
-    if (categoryId == null) {
+    if (categoryId == null || categoryId == -1) {
       emit(state.copyWith(
         status: ProductStatus.success,
         filterProducts: state.products,
-        selectedCategoryId: null,
         clearCategoryId: true,
+        clearError: true,
       ));
       return;
     }
+
+    emit(state.copyWith(status: ProductStatus.loading));
 
     final result = await repository.getProductsByCategory(categoryId);
 
@@ -68,7 +69,6 @@ class ProductCubit extends Cubit<ProductState> {
     if (query.isEmpty) {
       emit(state.copyWith(
         filterProducts: state.products,
-        searchQuery: null,
         clearSearch: true,
       ));
       return;
@@ -168,7 +168,7 @@ class ProductCubit extends Cubit<ProductState> {
     }).toList();
 
     emit(state.copyWith(
-      product: updatedProducts,
+      products: updatedProducts,
       filterProducts: updatedFilterProducts,
     ));
   }

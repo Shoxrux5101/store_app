@@ -3,8 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:store_app/core/routes/routes.dart';
+import 'package:store_app/features/my_cart/managers/my_cart_bloc.dart';
 import 'package:store_app/features/product_details/managers/product_detail_bloc.dart';
 import 'package:store_app/features/product_details/managers/product_detail_state.dart';
+import '../../../data/models/my_cart_model.dart';
+import '../../my_cart/managers/my_cart_event.dart';
 import '../managers/product_detail_even.dart';
 
 class ProductDetailPage extends StatefulWidget {
@@ -256,7 +259,31 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 child: Container(
                                   height: 50,
                                   child: ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      print("Add to cart tugmasi bosildi");
+                                      if (product.productSizes.isNotEmpty && selectedSizeIndex == -1) {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(content: Text("Iltimos, o‘lchamni tanlang")),
+                                        );
+                                        return;
+                                      }
+                                      final selectedSize = product.productSizes.isNotEmpty
+                                          ? product.productSizes[selectedSizeIndex].title
+                                          : '';
+                                      final item = MyCartProductItem(
+                                        id: 0,
+                                        productId: product.id,
+                                        title: product.title,
+                                        size: selectedSize,
+                                        price: product.price,
+                                        image: product.productImages.isNotEmpty ? product.productImages.first.image : '',
+                                        quantity: 1,
+                                      );
+                                      context.read<MyCartBloc>().add(AddMyCartProduct(item));
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(content: Text("Mahsulot savatchaga qo‘shildi")),
+                                      );
+                                    },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.black,
                                       foregroundColor: Colors.white,

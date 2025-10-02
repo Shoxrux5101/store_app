@@ -18,29 +18,29 @@ class ProductState extends Equatable {
     required this.status,
     required this.products,
     required this.filterProducts,
-    required this.errorMassage,
-    required this.selectedCategoryId,
-    required this.searchQuery,
-    required this.maxPrice,
-    required this.minPrice,
-    required this.sort,
+    this.errorMassage,
+    this.selectedCategoryId,
+    this.searchQuery,
+    this.maxPrice,
+    this.minPrice,
+    this.sort,
   });
 
-  factory ProductState.initial() => ProductState(
+  factory ProductState.initial() => const ProductState(
     status: ProductStatus.idle,
     products: [],
     filterProducts: [],
-    errorMassage: '',
+    errorMassage: null,
     selectedCategoryId: null,
-    searchQuery: '',
+    searchQuery: null,
     maxPrice: null,
     minPrice: null,
-    sort: '',
+    sort: null,
   );
 
   ProductState copyWith({
     ProductStatus? status,
-    List<ProductModel>? product,
+    List<ProductModel>? products,
     List<ProductModel>? filterProducts,
     String? errorMassage,
     int? selectedCategoryId,
@@ -58,12 +58,12 @@ class ProductState extends Equatable {
       status: status ?? this.status,
       products: products ?? this.products,
       filterProducts: filterProducts ?? this.filterProducts,
-      errorMassage: errorMassage ?? this.errorMassage,
-      selectedCategoryId: selectedCategoryId ?? this.selectedCategoryId,
-      searchQuery: searchQuery ?? this.searchQuery,
-      maxPrice: maxPrice ?? this.maxPrice,
-      minPrice: minPrice ?? this.minPrice,
-      sort: sort ?? this.sort,
+      errorMassage: clearError ? null : errorMassage ?? this.errorMassage,
+      selectedCategoryId: clearCategoryId ? null : selectedCategoryId ?? this.selectedCategoryId,
+      searchQuery: clearSearch ? null : searchQuery ?? this.searchQuery,
+      maxPrice: clearPriceRange ? null : maxPrice ?? this.maxPrice,
+      minPrice: clearPriceRange ? null : minPrice ?? this.minPrice,
+      sort: clearSort ? null : sort ?? this.sort,
     );
   }
 

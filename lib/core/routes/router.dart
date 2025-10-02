@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:store_app/core/routes/routes.dart';
 import 'package:store_app/features/account/pages/account_page.dart';
 import 'package:store_app/features/card/pages/card_page.dart';
+import 'package:store_app/features/my_cart/pages/my_cart_page.dart';
 import 'package:store_app/features/product_details/pages/product_detail_page.dart';
 import 'package:store_app/features/review/pages/review_page.dart';
 import 'package:store_app/features/saved/pages/saved_page.dart';
@@ -61,7 +62,7 @@ class AppRouter {
       ),
       GoRoute(path: Routes.cartPage,
           builder: (context, state) {
-            return CardPage();
+            return MyCartScreen();
           }
       ),
       GoRoute(path: Routes.accountPage,
