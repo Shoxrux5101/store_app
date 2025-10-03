@@ -31,7 +31,6 @@ class CategoryTabsWidget extends StatelessWidget {
               itemCount: state.categories.length,
               itemBuilder: (context, index) {
                 final category = state.categories[index];
-                print(category);
                 return _CategoryTabButton(
                   category: category,
                   isSelected: category.id == state.selectedCategoryId,

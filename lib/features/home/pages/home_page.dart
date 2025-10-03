@@ -8,6 +8,7 @@ import '../../../core/authInterceptor.dart';
 import '../../../core/network/api_client.dart';
 import '../../../data/repository/category_repository.dart';
 import '../../../data/repository/product_repository.dart';
+import '../../../data/repository/saved_repository.dart';
 import '../managers/home_cubit.dart';
 import '../managers/product_cubit.dart';
 import '../widgets/category_tabs_widget.dart';
@@ -57,8 +58,16 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
+            SavedRepository(
+              apiClient: ApiClient(
+                interceptor: AuthInterceptor(
+                  secureStorage: const FlutterSecureStorage(),
+                ),
+              ),
+            ),
           )..fetchProducts(),
         ),
+
       ],
       child: Scaffold(
         backgroundColor: Colors.white,

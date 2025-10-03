@@ -11,6 +11,7 @@ import 'package:store_app/data/repository/saved_repository.dart';
 import 'package:store_app/features/card/managers/card_bloc.dart';
 import 'package:store_app/features/card/managers/card_event.dart';
 import 'package:store_app/features/home/managers/category_cubit.dart';
+import 'package:store_app/features/home/managers/product_cubit.dart';
 import 'package:store_app/features/notification/managers/notification_bloc.dart';
 import 'package:store_app/features/product_details/managers/product_detail_bloc.dart';
 import 'package:store_app/features/review/managers/review_bloc.dart';
@@ -29,31 +30,124 @@ import 'network/api_client.dart';
 final dependencies = <SingleChildWidget>[
   ChangeNotifierProvider(
     create: (context) => AuthViewModel(
-      repository: AuthRepository(dioClient: ApiClient(interceptor: AuthInterceptor(secureStorage: const FlutterSecureStorage(),),),),),),
+      repository: AuthRepository(
+        dioClient: ApiClient(
+          interceptor: AuthInterceptor(
+            secureStorage: const FlutterSecureStorage(),
+          ),
+        ),
+      ),
+    ),
+  ),
 
   Provider(
-    create: (context) => CategoryRepository(apiClient: ApiClient(interceptor: AuthInterceptor(secureStorage: const FlutterSecureStorage(),),),),),
-  Provider(create: (context) => NotificationRepository(apiClient: ApiClient(interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage())))),
-  Provider(create: (context) => ProductRepository(apiClient: ApiClient(interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage())))),
-  Provider(create: (context) => ProductDetailRepository(apiClient: ApiClient(interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage())))),
-  Provider(create: (context) => ReviewRepository(apiClient: ApiClient(interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage())))),
-  Provider(create: (context) => CardRepository(apiClient: ApiClient(interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage())))),
-  Provider(create: (context) => SavedRepository(apiClient: ApiClient(interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage())))),
-  Provider(create: (context) => MyCartRepository(apiClient: ApiClient(interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage())))),
-  Provider(create: (context) => CategoryRepository(apiClient: ApiClient(interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage())))),
+    create: (context) => CategoryRepository(
+      apiClient: ApiClient(
+        interceptor: AuthInterceptor(
+          secureStorage: const FlutterSecureStorage(),
+        ),
+      ),
+    ),
+  ),
+  Provider(
+    create: (context) => NotificationRepository(
+      apiClient: ApiClient(
+        interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage()),
+      ),
+    ),
+  ),
+  Provider(
+    create: (context) => ProductRepository(
+      apiClient: ApiClient(
+        interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage()),
+      ),
+    ),
+  ),
+  Provider(
+    create: (context) => ProductDetailRepository(
+      apiClient: ApiClient(
+        interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage()),
+      ),
+    ),
+  ),
+  Provider(
+    create: (context) => ReviewRepository(
+      apiClient: ApiClient(
+        interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage()),
+      ),
+    ),
+  ),
+  Provider(
+    create: (context) => CardRepository(
+      apiClient: ApiClient(
+        interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage()),
+      ),
+    ),
+  ),
+  Provider(
+    create: (context) => SavedRepository(
+      apiClient: ApiClient(
+        interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage()),
+      ),
+    ),
+  ),
+  Provider(
+    create: (context) => MyCartRepository(
+      apiClient: ApiClient(
+        interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage()),
+      ),
+    ),
+  ),
+  Provider(
+    create: (context) => CategoryRepository(
+      apiClient: ApiClient(
+        interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage()),
+      ),
+    ),
+  ),
 
-
-  BlocProvider(create: (context) => HomeCubit(context.read<CategoryRepository>())),
-  BlocProvider(create: (context) => CategoryCubit(context.read<CategoryRepository>())..fetchCategories()),
-  BlocProvider(create: (context) => NotificationBloc(context.read<NotificationRepository>(),)..add(NotificationEventFetch())),
-  BlocProvider(create: (context) => ReviewBloc(repository: context.read<ReviewRepository>())),
-  BlocProvider(create: (context) => ProductDetailBloc(repository: context.read<ProductDetailRepository>(),),),
-  BlocProvider(create: (context) => CardBloc(repository: context.read<CardRepository>())..add(LoadCards())),
-  BlocProvider(create: (context) => SavedBloc(repository: context.read<SavedRepository>())..add(LoadSavedItems())),
-  BlocProvider(create: (context) => MyCartBloc(repository: context.read<MyCartRepository>(),)..add(LoadMyCart()),),
-
-
-
-
-
+  BlocProvider(
+    create: (context) => HomeCubit(
+      context.read<CategoryRepository>(),
+    ),
+  ),
+  BlocProvider(
+    create: (context) =>
+        CategoryCubit(context.read<CategoryRepository>())..fetchCategories(),
+  ),
+  BlocProvider(
+    create: (context) => NotificationBloc(
+      context.read<NotificationRepository>(),
+    )..add(NotificationEventFetch()),
+  ),
+  BlocProvider(
+    create: (context) =>
+        ReviewBloc(repository: context.read<ReviewRepository>()),
+  ),
+  BlocProvider(
+    create: (context) => ProductDetailBloc(
+      repository: context.read<ProductDetailRepository>(),
+    ),
+  ),
+  BlocProvider(
+    create: (context) =>
+        CardBloc(repository: context.read<CardRepository>(),
+        )..add(LoadCards()),
+  ),
+  BlocProvider(
+    create: (context) => ProductCubit(
+      context.read<ProductRepository>(),
+      context.read<SavedRepository>(),
+    )..fetchProducts(),
+  ),
+  BlocProvider(
+    create: (context) =>
+        SavedBloc(repository: context.read<SavedRepository>(),
+        )..add(LoadSavedItems()),
+  ),
+  BlocProvider(
+    create: (context) => MyCartBloc(
+      repository: context.read<MyCartRepository>(),
+    )..add(LoadMyCart()),
+  ),
 ];

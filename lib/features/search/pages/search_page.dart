@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:store_app/data/repository/product_repository.dart';
 import '../../../core/routes/routes.dart';
+import '../../../data/repository/saved_repository.dart';
 import '../../home/managers/product_cubit.dart';
 import '../../home/managers/product_state.dart';
 import '../../home/widgets/custom_bottom_nav_bar.dart';
@@ -72,7 +73,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ProductCubit(context.read<ProductRepository>())..fetchProducts(),
+      create: (context) => ProductCubit(context.read<ProductRepository>(),context.read<SavedRepository>(),)..fetchProducts(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Search"),

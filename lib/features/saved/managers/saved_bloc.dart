@@ -11,7 +11,16 @@ class SavedBloc extends Bloc<SavedEvent, SavedState> {
   SavedBloc({required this.repository}) : super(SavedInitial()) {
     on<LoadSavedItems>((event, emit) async {
       emit(SavedLoading());
-      emit(SavedLoaded(List.from(_items)));
+      final result = await repository.getSavedItems();
+      result.fold(
+            (error) => emit(SavedError(error.toString())),
+            (items) {
+          _items
+            ..clear()
+            ..addAll(items);
+          emit(SavedLoaded(List.from(_items)));
+        },
+      );
     });
 
     on<SaveItem>((event, emit) async {
@@ -19,7 +28,10 @@ class SavedBloc extends Bloc<SavedEvent, SavedState> {
       result.fold(
             (error) => emit(SavedError(error.toString())),
             (_) {
-          _items.add(event.item.copyWith(isLiked: true));
+          final index = _items.indexWhere((e) => e.id == event.item.id);
+          if (index == -1) {
+            _items.add(event.item.copyWith(isLiked: true));
+          }
           emit(SavedLoaded(List.from(_items)));
         },
       );
@@ -36,4 +48,6 @@ class SavedBloc extends Bloc<SavedEvent, SavedState> {
       );
     });
   }
+
+  List<SavedItem> get currentItems => List.from(_items);
 }

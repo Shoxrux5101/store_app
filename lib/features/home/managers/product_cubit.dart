@@ -1,13 +1,15 @@
 import 'package:bloc/bloc.dart';
 import 'package:store_app/features/home/managers/product_state.dart';
 import '../../../data/repository/product_repository.dart';
+import '../../../data/repository/saved_repository.dart';
 import '../../../data/models/product_model.dart';
-
+import '../../../data/models/saved_item_model.dart';
 
 class ProductCubit extends Cubit<ProductState> {
   final ProductRepository repository;
+  final SavedRepository savedRepository;
 
-  ProductCubit(this.repository) : super(ProductState.initial());
+  ProductCubit(this.repository, this.savedRepository) : super(ProductState.initial());
 
   Future<void> fetchProducts() async {
     emit(state.copyWith(status: ProductStatus.loading));
@@ -21,11 +23,25 @@ class ProductCubit extends Cubit<ProductState> {
           errorMassage: error.toString(),
         ));
       },
-          (products) {
+          (products) async {
+        final savedResult = await savedRepository.getSavedItems();
+        List<ProductModel> updatedProducts = products;
+
+        savedResult.fold(
+              (error) {
+          },
+              (savedItems) {
+            final savedIds = savedItems.map((e) => e.id).toSet();
+            updatedProducts = products.map((product) {
+              return product.copyWith(isLiked: savedIds.contains(product.id));
+            }).toList();
+          },
+        );
+
         emit(state.copyWith(
           status: ProductStatus.success,
-          products: products,
-          filterProducts: products,
+          products: updatedProducts,
+          filterProducts: updatedProducts,
           clearError: true,
         ));
       },
@@ -54,10 +70,23 @@ class ProductCubit extends Cubit<ProductState> {
           errorMassage: error.toString(),
         ));
       },
-          (products) {
+          (products) async {
+        final savedResult = await savedRepository.getSavedItems();
+        List<ProductModel> updatedProducts = products;
+
+        savedResult.fold(
+              (error) {},
+              (savedItems) {
+            final savedIds = savedItems.map((e) => e.id).toSet();
+            updatedProducts = products.map((product) {
+              return product.copyWith(isLiked: savedIds.contains(product.id));
+            }).toList();
+          },
+        );
+
         emit(state.copyWith(
           status: ProductStatus.success,
-          filterProducts: products,
+          filterProducts: updatedProducts,
           selectedCategoryId: categoryId,
           clearError: true,
         ));
@@ -85,10 +114,23 @@ class ProductCubit extends Cubit<ProductState> {
           errorMassage: error.toString(),
         ));
       },
-          (products) {
+          (products) async {
+        final savedResult = await savedRepository.getSavedItems();
+        List<ProductModel> updatedProducts = products;
+
+        savedResult.fold(
+              (error) {},
+              (savedItems) {
+            final savedIds = savedItems.map((e) => e.id).toSet();
+            updatedProducts = products.map((product) {
+              return product.copyWith(isLiked: savedIds.contains(product.id));
+            }).toList();
+          },
+        );
+
         emit(state.copyWith(
           status: ProductStatus.success,
-          filterProducts: products,
+          filterProducts: updatedProducts,
           searchQuery: query,
           clearError: true,
         ));
@@ -111,10 +153,23 @@ class ProductCubit extends Cubit<ProductState> {
           errorMassage: error.toString(),
         ));
       },
-          (products) {
+          (products) async {
+        final savedResult = await savedRepository.getSavedItems();
+        List<ProductModel> updatedProducts = products;
+
+        savedResult.fold(
+              (error) {},
+              (savedItems) {
+            final savedIds = savedItems.map((e) => e.id).toSet();
+            updatedProducts = products.map((product) {
+              return product.copyWith(isLiked: savedIds.contains(product.id));
+            }).toList();
+          },
+        );
+
         emit(state.copyWith(
           status: ProductStatus.success,
-          filterProducts: products,
+          filterProducts: updatedProducts,
           minPrice: minPrice,
           maxPrice: maxPrice,
           clearError: true,
@@ -152,19 +207,51 @@ class ProductCubit extends Cubit<ProductState> {
     ));
   }
 
-  void toggleLike(int productId) {
-    final updatedProducts = state.products.map((product) {
-      if (product.id == productId) {
-        return product.copyWith(isLiked: !product.isLiked);
+  Future<void> toggleLike(ProductModel product) async {
+    final updatedProducts = state.products.map((p) {
+      if (p.id == product.id) {
+        return p.copyWith(isLiked: !p.isLiked);
       }
-      return product;
+      return p;
+    }).toList();
+
+    final updatedFilterProducts = state.filterProducts.map((p) {
+      if (p.id == product.id) {
+        return p.copyWith(isLiked: !p.isLiked);
+      }
+      return p;
+    }).toList();
+
+    emit(state.copyWith(
+      products: updatedProducts,
+      filterProducts: updatedFilterProducts,
+    ));
+
+    if (!product.isLiked) {
+      final savedItem = SavedItem(
+        id: product.id,
+        categoryId: product.categoryId,
+        title: product.title,
+        image: product.image,
+        price: product.price,
+        isLiked: true,
+        discount: product.discount,
+      );
+      await savedRepository.saveItem(savedItem.id);
+    } else {
+      await savedRepository.unsaveItem(product.id);
+    }
+  }
+
+  void updateProductsFromSaved(List<SavedItem> savedItems) {
+    final savedIds = savedItems.map((e) => e.id).toSet();
+
+    final updatedProducts = state.products.map((product) {
+      return product.copyWith(isLiked: savedIds.contains(product.id));
     }).toList();
 
     final updatedFilterProducts = state.filterProducts.map((product) {
-      if (product.id == productId) {
-        return product.copyWith(isLiked: !product.isLiked);
-      }
-      return product;
+      return product.copyWith(isLiked: savedIds.contains(product.id));
     }).toList();
 
     emit(state.copyWith(

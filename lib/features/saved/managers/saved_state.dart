@@ -13,7 +13,6 @@ class SavedLoading extends SavedState {}
 class SavedLoaded extends SavedState {
   final List<SavedItem> items;
   SavedLoaded(this.items);
-
   @override
   List<Object?> get props => [items];
 }
@@ -21,7 +20,6 @@ class SavedLoaded extends SavedState {
 class SavedError extends SavedState {
   final String message;
   SavedError(this.message);
-
   @override
   List<Object?> get props => [message];
 }

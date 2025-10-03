@@ -11,7 +11,6 @@ class LoadSavedItems extends SavedEvent {}
 class SaveItem extends SavedEvent {
   final SavedItem item;
   SaveItem(this.item);
-
   @override
   List<Object?> get props => [item];
 }
@@ -19,7 +18,6 @@ class SaveItem extends SavedEvent {
 class UnsaveItem extends SavedEvent {
   final int id;
   UnsaveItem(this.id);
-
   @override
   List<Object?> get props => [id];
 }

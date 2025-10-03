@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:store_app/features/saved/widgets/favourite_button.dart';
 import '../../../data/models/product_model.dart';
 import '../../product_details/pages/product_detail_page.dart';
 import '../managers/product_cubit.dart';
@@ -66,28 +67,9 @@ class ProductCard extends StatelessWidget {
                       },
                     ),
                   ),
-                  Positioned(
-                    top: 8,
-                    right: 8,
-                    child: GestureDetector(
-                      onTap: () {
-                        context.read<ProductCubit>().toggleLike(product.id);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          product.isLiked
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          color: product.isLiked ? Colors.red : Colors.grey,
-                          size: 16,
-                        ),
-                      ),
-                    ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 8,top: 8,left: 148),
+                    child: FavouriteButton(product: product),
                   ),
                   if (hasDiscount)
                     Positioned(

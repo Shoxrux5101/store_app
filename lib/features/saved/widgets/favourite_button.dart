@@ -1,44 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:store_app/features/saved/managers/saved_bloc.dart';
-import 'package:store_app/features/saved/managers/saved_event.dart';
-import 'package:store_app/data/models/saved_item_model.dart';
+import '../../../data/models/product_model.dart';
+import '../../../data/models/saved_item_model.dart';
+import '../../home/managers/product_cubit.dart';
+import '../managers/saved_bloc.dart';
+import '../managers/saved_event.dart';
 
 class FavouriteButton extends StatelessWidget {
-  final SavedItem item;
+  final ProductModel product;
 
-  const FavouriteButton({super.key, required this.item});
+  const FavouriteButton({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        if (item.isLiked) {
-          context.read<SavedBloc>().add(UnsaveItem(item.id));
+      onTap: () async {
+        if (!product.isLiked) {
+          await context.read<ProductCubit>().toggleLike(product);
+          context.read<SavedBloc>().add(SaveItem(
+            SavedItem(
+              id: product.id,
+              categoryId: product.categoryId,
+              title: product.title,
+              image: product.image,
+              price: product.price,
+              isLiked: true,
+              discount: product.discount,
+            ),
+          ));
         } else {
-          context.read<SavedBloc>().add(SaveItem(item));
+          await context.read<ProductCubit>().toggleLike(product);
+          context.read<SavedBloc>().add(UnsaveItem(product.id));
         }
       },
+
       child: Container(
-        width: 34,
-        height: 34,
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            )
-          ],
         ),
-        child: Center(
-          child: Icon(
-            Icons.favorite,
-            size: 18,
-            color: item.isLiked ? Colors.red : Colors.grey,
-          ),
+        child: Icon(
+          product.isLiked ? Icons.favorite : Icons.favorite_border,
+          color: product.isLiked ? Colors.red : Colors.black,
+          size: 18,
         ),
       ),
     );
