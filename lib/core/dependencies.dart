@@ -2,16 +2,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:store_app/data/repository/address_repository.dart';
 import 'package:store_app/data/repository/card_item_repository.dart';
+import 'package:store_app/data/repository/my_detail_repository.dart';
 import 'package:store_app/data/repository/notification_repository.dart';
 import 'package:store_app/data/repository/product_detail_repository.dart';
 import 'package:store_app/data/repository/product_repository.dart';
 import 'package:store_app/data/repository/review_repository.dart';
 import 'package:store_app/data/repository/saved_repository.dart';
+import 'package:store_app/features/address/managers/address_bloc.dart';
+import 'package:store_app/features/address/managers/address_event.dart';
+import 'package:store_app/features/address/managers/address_state.dart';
 import 'package:store_app/features/card/managers/card_bloc.dart';
 import 'package:store_app/features/card/managers/card_event.dart';
 import 'package:store_app/features/home/managers/category_cubit.dart';
 import 'package:store_app/features/home/managers/product_cubit.dart';
+import 'package:store_app/features/my_details/manager/my_detail_bloc.dart';
+import 'package:store_app/features/my_details/manager/my_detail_event.dart';
+import 'package:store_app/features/my_details/manager/my_detail_state.dart';
 import 'package:store_app/features/notification/managers/notification_bloc.dart';
 import 'package:store_app/features/product_details/managers/product_detail_bloc.dart';
 import 'package:store_app/features/review/managers/review_bloc.dart';
@@ -105,6 +113,20 @@ final dependencies = <SingleChildWidget>[
       ),
     ),
   ),
+  Provider(
+    create: (context) => MyDetailRepository(
+      apiClient: ApiClient(
+        interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage()),
+      ),
+    ),
+  ),
+  Provider(
+    create: (context) => AddressRepository(
+      apiClient: ApiClient(
+        interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage()),
+      ),
+    ),
+  ),
 
   BlocProvider(
     create: (context) => HomeCubit(
@@ -130,9 +152,9 @@ final dependencies = <SingleChildWidget>[
     ),
   ),
   BlocProvider(
-    create: (context) =>
-        CardBloc(repository: context.read<CardRepository>(),
-        )..add(LoadCards()),
+    create: (context) => CardBloc(
+      repository: context.read<CardRepository>(),
+    )..add(LoadCards()),
   ),
   BlocProvider(
     create: (context) => ProductCubit(
@@ -141,13 +163,24 @@ final dependencies = <SingleChildWidget>[
     )..fetchProducts(),
   ),
   BlocProvider(
-    create: (context) =>
-        SavedBloc(repository: context.read<SavedRepository>(),
-        )..add(LoadSavedItems()),
+    create: (context) => SavedBloc(
+      repository: context.read<SavedRepository>(),
+    )..add(LoadSavedItems()),
   ),
   BlocProvider(
     create: (context) => MyCartBloc(
       repository: context.read<MyCartRepository>(),
     )..add(LoadMyCart()),
   ),
+  // BlocProvider(
+  //   create: (context) => MyDetailBloc(
+  //     repository: context.read<MyDetailRepository>(),
+  //   )..add(LoadMyDetail()),
+  // ),
+  BlocProvider(
+    create: (context) => AddressBloc(
+      context.read<AddressRepository>(),
+    )..add(LoadAddresses()),
+  )
+
 ];

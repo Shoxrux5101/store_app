@@ -12,4 +12,5 @@ class Routes {
   static String notification = '/notification';
   static String productDetail = '/detail';
   static String reviewPage = '/reviewPage';
+  static String addressPage = '/addressPage';
 }

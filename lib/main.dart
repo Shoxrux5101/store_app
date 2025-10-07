@@ -15,6 +15,7 @@ void main() async{
   // await FirebaseMessaging.instance.requestPermission();
   //print("Token: ${token}");
   runApp(const MyApp());
+
 }
 
 class MyApp extends StatelessWidget {

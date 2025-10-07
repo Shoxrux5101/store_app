@@ -7,16 +7,15 @@ class MyDetailRepository {
 
   MyDetailRepository({required ApiClient apiClient}) : _apiClient = apiClient;
 
-  Future<Result<List<MyDetailModel>>> getDetails() async {
-    final response = await _apiClient.get('/mydetails/list');
+  Future<Result<MyDetail>> getDetails() async {
+    final response = await _apiClient.get('/auth/me');
 
     return response.fold(
           (error) => Result.error(error),
           (success) {
-        final data = (success as List)
-            .map((e) => MyDetailModel.fromJson(e))
-            .toList();
-        return Result.ok(data);
+        final data = success as Map<String, dynamic>;
+        final detail = MyDetail.fromJson(data);
+        return Result.ok(detail);
       },
     );
   }

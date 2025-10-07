@@ -93,7 +93,7 @@ class _AccountPageState extends State<AccountPage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => MyDetails()),
+                      MaterialPageRoute(builder: (context) => MyDetailPage()),
                     );
                   },
                 ),
@@ -105,10 +105,7 @@ class _AccountPageState extends State<AccountPage> {
                   iconPath: 'assets/icons/account-home.svg',
                   title: "Address Book",
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => MyDetails()),
-                    // );
+                   context.push(Routes.addressPage);
                   },
                 ),
                 Padding(

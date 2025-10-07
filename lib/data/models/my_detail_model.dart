@@ -1,22 +1,28 @@
-class MyDetailModel{
+class MyDetail {
   final int id;
-  final String title;
-  final double price;
-  final String image;
+  final String fullName;
+  final String email;
+  final String phoneNumber;
+  final String gender;
+  final String birthDate;
 
-  MyDetailModel({
+  MyDetail({
     required this.id,
-    required this.title,
-    required this.price,
-    required this.image,
+    required this.fullName,
+    required this.email,
+    required this.phoneNumber,
+    required this.gender,
+    required this.birthDate,
   });
 
-  factory MyDetailModel.fromJson(Map<String, dynamic> json) {
-    return MyDetailModel(
+  factory MyDetail.fromJson(Map<String, dynamic> json) {
+    return MyDetail(
       id: json['id'],
-      title: json['title'],
-      price: (json['price'] as num).toDouble(),
-      image: json['image'],
+      fullName: json['fullName'],
+      email: json['email'],
+      phoneNumber: json['phoneNumber'],
+      gender: json['gender'],
+      birthDate: json['birthDate'],
     );
   }
 }

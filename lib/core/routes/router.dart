@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:store_app/core/routes/routes.dart';
 import 'package:store_app/features/account/pages/account_page.dart';
+import 'package:store_app/features/address/page/address_page.dart';
 import 'package:store_app/features/card/pages/card_page.dart';
 import 'package:store_app/features/my_cart/pages/my_cart_page.dart';
 import 'package:store_app/features/product_details/pages/product_detail_page.dart';
@@ -19,61 +20,71 @@ class AppRouter {
   static final GoRouter router = GoRouter(
     initialLocation: Routes.homePage,
     routes: [
-      GoRoute(path: Routes.splash,
-          builder: (context,state) {
-            return Splash();
-          }
-      ),
-      GoRoute(path: Routes.onboarding,
-        builder: (context,state) {
-          return Onboarding();
-        }
+      GoRoute(
+        path: Routes.splash,
+        builder: (context, state) {
+          return Splash();
+        },
       ),
       GoRoute(
-          path: Routes.signUp,
-          builder: (context,state) {
-            return SignUp();
-          }
-      ),
-      GoRoute(path: Routes.loginPage,
+        path: Routes.onboarding,
         builder: (context, state) {
-        return LoginPage();
-        }
+          return Onboarding();
+        },
       ),
-      GoRoute(path: Routes.forgotPage,
+      GoRoute(
+        path: Routes.signUp,
         builder: (context, state) {
-        return ForgotPasswordPage();
-        }
+          return SignUp();
+        },
       ),
-      GoRoute(path: Routes.homePage,
+      GoRoute(
+        path: Routes.loginPage,
         builder: (context, state) {
-        return HomePage();
-        }
+          return LoginPage();
+        },
       ),
-      GoRoute(path: Routes.searchPage,
-          builder: (context, state) {
-            return SearchPage();
-          }
-      ),
-      GoRoute(path: Routes.savedPage,
-          builder: (context, state) {
-            return SavedPage();
-          }
-      ),
-      GoRoute(path: Routes.cartPage,
-          builder: (context, state) {
-            return MyCartScreen();
-          }
-      ),
-      GoRoute(path: Routes.accountPage,
-          builder: (context, state) {
-            return AccountPage();
-          }
-      ),
-      GoRoute(path: Routes.notification,
+      GoRoute(
+        path: Routes.forgotPage,
         builder: (context, state) {
-        return NotificationPage();
-        }
+          return ForgotPasswordPage();
+        },
+      ),
+      GoRoute(
+        path: Routes.homePage,
+        builder: (context, state) {
+          return HomePage();
+        },
+      ),
+      GoRoute(
+        path: Routes.searchPage,
+        builder: (context, state) {
+          return SearchPage();
+        },
+      ),
+      GoRoute(
+        path: Routes.savedPage,
+        builder: (context, state) {
+          return SavedPage();
+        },
+      ),
+      GoRoute(
+        path: Routes.cartPage,
+        builder: (context, state) {
+          return MyCartScreen();
+        },
+      ),
+      GoRoute(
+        path: Routes.accountPage,
+        builder: (context, state) {
+          return AccountPage();
+        },
+      ),
+      GoRoute(
+        path: Routes.notification,
+        builder: (context, state) {
+          return NotificationPage();
+        },
       ),
       GoRoute(
         path: Routes.productDetail,
@@ -87,6 +98,12 @@ class AppRouter {
         builder: (context, state) {
           final productId = state.extra as int;
           return ReviewPage(productId: productId);
+        },
+      ),
+      GoRoute(
+        path: Routes.addressPage,
+        builder: (context, state) {
+          return AddressPage();
         },
       ),
     ],
