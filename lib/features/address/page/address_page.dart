@@ -27,71 +27,67 @@ class _AddressPageState extends State<AddressPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Address"),
+        title: Text("Address"),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_none),
+            icon: Icon(Icons.notifications_none),
             onPressed: () {},
           ),
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         child: Column(
           children: [
-            const Align(
+            Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 "Saved Address",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
-            const SizedBox(height: 12),
-
-            // Scroll qilinadigan Cardlar
+            SizedBox(height: 12),
             Expanded(
               child: BlocBuilder<AddressBloc, AddressState>(
                 builder: (context, state) {
                   if (state is AddressLoading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return Center(child: CircularProgressIndicator());
                   } else if (state is AddressLoaded) {
                     final addresses = state.addresses;
 
                     if (addresses.isEmpty) {
-                      return const Center(child: Text("No addresses found"));
+                      return Center(child: Text("No addresses found"));
                     }
-
+                      selectedId ??= addresses.first.id;
                     return ListView.builder(
                       padding: EdgeInsets.zero,
                       itemCount: addresses.length,
                       itemBuilder: (context, index) {
                         final item = addresses[index];
+                        final isDefaultDisplay = index == 0;
                         return Card(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          margin: const EdgeInsets.only(bottom: 12),
+                          margin: EdgeInsets.only(bottom: 12),
                           child: ListTile(
-                            leading: const Icon(Icons.location_on_outlined),
+                            leading: Icon(Icons.location_on_outlined),
                             title: Row(
                               children: [
                                 Text(item.title,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold)),
-                                if (item.isDefault)
+                                    style: TextStyle(fontWeight: FontWeight.bold)),
+                                if (isDefaultDisplay)
                                   Container(
-                                    margin: const EdgeInsets.only(left: 6),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 6, vertical: 2),
+                                    margin: EdgeInsets.only(left: 6),
+                                    padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                     decoration: BoxDecoration(
                                       color: Colors.grey.shade300,
                                       borderRadius: BorderRadius.circular(4),
                                     ),
-                                    child: const Text(
+                                    child: Text(
                                       "Default",
-                                      style: TextStyle(
-                                          fontSize: 10, color: Colors.black87),
+                                      style: TextStyle(fontSize: 10, color: Colors.black87),
                                     ),
                                   ),
                               ],
@@ -111,30 +107,25 @@ class _AddressPageState extends State<AddressPage> {
                       },
                     );
                   } else if (state is AddressError) {
-                    return Center(
-                        child: Text("Error: ${state.message.toString()}"));
+                    return Center(child: Text("Error: ${state.message.toString()}"));
                   }
-                  return const SizedBox.shrink();
+                  return SizedBox.shrink();
                 },
               ),
             ),
-
-            // 24 px bo‘sh joy
-            const SizedBox(height: 24),
-
-            // Add new address
+            SizedBox(height: 24),
             GestureDetector(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => NewAddressPage()));
               },
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 14),
+                padding: EdgeInsets.symmetric(vertical: 14),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey.shade400),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.add, size: 20),
@@ -144,24 +135,23 @@ class _AddressPageState extends State<AddressPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
-
-            // Apply button
+            SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
                   if (selectedId != null) {
-                    print("Selected address id: $selectedId");
+                    print("selected id: $selectedId");
                   }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  padding: EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: const Text("Apply",style: TextStyle(color: Colors.white),),
+                child: Text("Apply",style: TextStyle(color: Colors.white),),
               ),
             ),
+            SizedBox(height: 25,),
           ],
         ),
       ),

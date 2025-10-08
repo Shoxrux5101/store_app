@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:store_app/features/address/managers/address_bloc.dart';
 
 class NewAddressWidget extends StatefulWidget {
   const NewAddressWidget({super.key});
@@ -22,37 +24,33 @@ class _NewAddressWidgetState extends State<NewAddressWidget> {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_none),
+            icon: Icon(Icons.notifications_none),
             onPressed: () {},
           ),
         ],
       ),
       body: Column(
         children: [
-          // Map placeholder
           Container(
             height: 250,
             color: Colors.grey.shade300,
-            child: const Center(
+            child: Center(
               child: Icon(Icons.location_pin, size: 48, color: Colors.black),
             ),
           ),
 
           Expanded(
             child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Address",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                  const SizedBox(height: 16),
-
-                  // Nickname Dropdown
+                  Text("Address",style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  SizedBox(height: 16),
                   DropdownButtonFormField<String>(
                     value: nickname,
                     decoration: const InputDecoration(
@@ -68,9 +66,7 @@ class _NewAddressWidgetState extends State<NewAddressWidget> {
                       });
                     },
                   ),
-                  const SizedBox(height: 16),
-
-                  // Full Address Field
+                  SizedBox(height: 16),
                   TextField(
                     controller: addressController,
                     decoration: const InputDecoration(
@@ -78,9 +74,7 @@ class _NewAddressWidgetState extends State<NewAddressWidget> {
                       border: OutlineInputBorder(),
                     ),
                   ),
-                  const SizedBox(height: 8),
-
-                  // Default Checkbox
+                  SizedBox(height: 8),
                   Row(
                     children: [
                       Checkbox(
@@ -91,24 +85,21 @@ class _NewAddressWidgetState extends State<NewAddressWidget> {
                           });
                         },
                       ),
-                      const Text("Make this as a default address")
+                      Text("Make this as a default address")
                     ],
                   ),
-
-                  const Spacer(),
-
-                  // Add button
+                  Spacer(),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Bloc orqali createAddress chaqiriladi
+                        context.read<AddressBloc>();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        padding: EdgeInsets.symmetric(vertical: 16),
                       ),
-                      child: const Text("Add"),
+                      child: Text("Add"),
                     ),
                   )
                 ],
