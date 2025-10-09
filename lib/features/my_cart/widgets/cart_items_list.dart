@@ -26,6 +26,7 @@ class CartItemsList extends StatelessWidget {
             ),
             child: Row(
               children: [
+                // Rasm
                 Container(
                   width: 80,
                   height: 80,
@@ -34,9 +35,9 @@ class CartItemsList extends StatelessWidget {
                     color: Colors.grey[200],
                     image: item.image.isNotEmpty
                         ? DecorationImage(
-                            image: NetworkImage(item.image),
-                            fit: BoxFit.cover,
-                          )
+                      image: NetworkImage(item.image),
+                      fit: BoxFit.cover,
+                    )
                         : null,
                   ),
                   child: item.image.isEmpty
@@ -44,6 +45,8 @@ class CartItemsList extends StatelessWidget {
                       : null,
                 ),
                 const SizedBox(width: 16),
+
+                // Ma'lumotlar
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,11 +62,14 @@ class CartItemsList extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         'Size ${item.size}',
-                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[600],
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        '\$${item.price}',
+                        '\$${item.price.toStringAsFixed(0)}',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -73,8 +79,11 @@ class CartItemsList extends StatelessWidget {
                     ],
                   ),
                 ),
+
+                // Delete va Quantity
                 Column(
                   children: [
+                    // DELETE tugmasi
                     GestureDetector(
                       onTap: () {
                         context.read<MyCartBloc>().add(
@@ -91,13 +100,19 @@ class CartItemsList extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
+
+                    // QUANTITY controls
                     Row(
                       children: [
+                        // MINUS tugmasi - TO'G'RI!
                         GestureDetector(
                           onTap: () {
                             if (item.quantity > 1) {
                               context.read<MyCartBloc>().add(
-                                AddMyCartProduct(item),
+                                UpdateMyCartQuantity(
+                                  itemId: item.id,
+                                  quantity: item.quantity - 1, // Kamaytirish
+                                ),
                               );
                             }
                           },
@@ -105,12 +120,24 @@ class CartItemsList extends StatelessWidget {
                             width: 32,
                             height: 32,
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey[300]!),
+                              border: Border.all(
+                                color: item.quantity > 1
+                                    ? Colors.grey[300]!
+                                    : Colors.grey[200]!,
+                              ),
                               borderRadius: BorderRadius.circular(6),
                             ),
-                            child: const Icon(Icons.remove, size: 16),
+                            child: Icon(
+                              Icons.remove,
+                              size: 16,
+                              color: item.quantity > 1
+                                  ? Colors.black
+                                  : Colors.grey[400],
+                            ),
                           ),
                         ),
+
+                        // Quantity ko'rsatish
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Text(
@@ -121,10 +148,15 @@ class CartItemsList extends StatelessWidget {
                             ),
                           ),
                         ),
+
+                        // PLUS tugmasi - TO'G'RI!
                         GestureDetector(
                           onTap: () {
                             context.read<MyCartBloc>().add(
-                              AddMyCartProduct(item),
+                              UpdateMyCartQuantity(
+                                itemId: item.id,
+                                quantity: item.quantity + 1, // Oshirish
+                              ),
                             );
                           },
                           child: Container(

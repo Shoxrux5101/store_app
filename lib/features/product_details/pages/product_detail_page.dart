@@ -264,19 +264,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                         );
                                         return;
                                       }
-                                      final selectedSize = product.productSizes.isNotEmpty
-                                          ? product.productSizes[selectedSizeIndex].title
-                                          : '';
-                                      final item = MyCartProductItem(
-                                        id: 0,
-                                        productId: product.id,
-                                        title: product.title,
-                                        size: selectedSize,
-                                        price: product.price,
-                                        image: product.productImages.isNotEmpty ? product.productImages.first.image : '',
-                                        quantity: 1,
-                                      );
-                                      context.read<MyCartBloc>().add(AddMyCartProduct(item));
+                                      final int selectedSize = product.productSizes.isNotEmpty
+                                          ? product.productSizes[selectedSizeIndex].id
+                                          : 0;
+                                      // final item = MyCartProductItem(
+                                      //   id: 0,
+                                      //   productId: product.id,
+                                      //   title: product.title,
+                                      //   size: selectedSize,
+                                      //   price: product.price,
+                                      //   image: product.productImages.isNotEmpty ? product.productImages.first.image : '',
+                                      //   quantity: 1,
+                                      // );
+                                      context.read<MyCartBloc>().add(AddMyCartProduct(product.id, selectedSize));
                                       ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(content: Text("Mahsulot savatchaga qo‘shildi")),
                                       );

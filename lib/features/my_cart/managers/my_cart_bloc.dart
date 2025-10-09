@@ -10,7 +10,31 @@ class MyCartBloc extends Bloc<MyCartEvent, MyCartState> {
     on<LoadMyCart>(_onLoadMyCart);
     on<AddMyCartProduct>(_onAddMyCartProduct);
     on<RemoveMyCartProduct>(_onRemoveMyCartProduct);
+    on<UpdateMyCartQuantity>(_onUpdateQuantity); // Yangi handler
   }
+
+  Future<void> _onUpdateQuantity(
+      UpdateMyCartQuantity event,
+      Emitter<MyCartState> emit,
+      ) async {
+    final currentState = state;
+
+    final result = await repository.updateQuantity(
+      itemId: event.itemId,
+      quantity: event.quantity,
+    );
+
+    result.fold(
+          (error) {
+        if (currentState is MyCartLoaded) {
+          emit(MyCartLoaded(currentState.cart));
+        }
+        // emit(MyCartError(error.toString()));
+      },
+          (cart) => emit(MyCartLoaded(cart)),
+    );
+  }
+
 
   Future<void> _onLoadMyCart(
       LoadMyCart event, Emitter<MyCartState> emit) async {
@@ -25,7 +49,7 @@ class MyCartBloc extends Bloc<MyCartEvent, MyCartState> {
   Future<void> _onAddMyCartProduct(
       AddMyCartProduct event, Emitter<MyCartState> emit) async {
     emit(MyCartLoading());
-    final result = await repository.addToMyCart(event.item);
+    final result = await repository.addToMyCart(event.productId, event.sizeId);
     result.fold(
           (error) => emit(MyCartError(error.toString())),
           (cart) => emit(MyCartLoaded(cart)),

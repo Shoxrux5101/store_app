@@ -9,9 +9,9 @@ class MyCartRepository {
 
   Future<Result<MyCartItemModel>> getMyCart() async {
     final response = await _apiClient.get('/my-cart/my-cart-items');
-    print('++++++++++++++');
-    print(response);
-    print('++++++++++++++');
+    // print('++++++++++++++');
+    // print(response);
+    // print('++++++++++++++');
     return response.fold(
           (error) => Result.error(error),
           (success) {
@@ -25,8 +25,11 @@ class MyCartRepository {
     );
   }
 
-  Future<Result<MyCartItemModel>> addToMyCart(MyCartProductItem item) async {
-    final response = await _apiClient.post('/my-cart/add-item', data: item.toJson());
+  Future<Result<MyCartItemModel>> addToMyCart(int productId, int sizeId) async {
+    final response = await _apiClient.post('/my-cart/add-item', data: {
+      "productId": productId,
+      "sizeId": sizeId
+    },);
     return response.fold(
           (error) => Result.error(error),
           (success) {
@@ -54,5 +57,26 @@ class MyCartRepository {
       },
     );
   }
+  Future<Result<MyCartItemModel>> updateQuantity({
+    required int itemId,
+    required int quantity
+  }) async {
+    final response = await _apiClient.patch(
+      '/my-cart/update-quantity/$itemId',
+      data: {'quantity': quantity},
+    );
+    return response.fold(
+          (error) => Result.error(error),
+          (success) {
+        try {
+          final data = success as Map<String, dynamic>;
+          return Result.ok(MyCartItemModel.fromJson(data));
+        } catch (e) {
+          return Result.error(Exception("Failed to update quantity: $e"));
+        }
+      },
+    );
+  }
+
 
 }

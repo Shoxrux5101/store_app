@@ -106,13 +106,13 @@ final dependencies = <SingleChildWidget>[
       ),
     ),
   ),
-  Provider(
-    create: (context) => CategoryRepository(
-      apiClient: ApiClient(
-        interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage()),
-      ),
-    ),
-  ),
+  // Provider(
+  //   create: (context) => CategoryRepository(
+  //     apiClient: ApiClient(
+  //       interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage()),
+  //     ),
+  //   ),
+  // ),
   Provider(
     create: (context) => MyDetailRepository(
       apiClient: ApiClient(
@@ -181,6 +181,6 @@ final dependencies = <SingleChildWidget>[
     create: (context) => AddressBloc(
       context.read<AddressRepository>(),
     )..add(LoadAddresses()),
-  )
+  ),
 
 ];
