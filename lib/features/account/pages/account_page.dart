@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:store_app/features/account/faq/page/f_a_qs.dart';
 import 'package:store_app/features/account/pages/my_orders.dart';
 import 'package:store_app/features/account/widgets/account_item.dart';
 import 'package:store_app/features/account/widgets/logout_dialog.dart';
@@ -148,7 +149,9 @@ class _AccountPageState extends State<AccountPage> {
                 AccountItem(
                   iconPath: "assets/icons/Question.svg",
                   title: "FAQs",
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> FAQsPage()));
+                  },
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 33),

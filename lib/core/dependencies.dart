@@ -15,6 +15,8 @@ import 'package:store_app/features/address/managers/address_event.dart';
 import 'package:store_app/features/address/managers/address_state.dart';
 import 'package:store_app/features/card/managers/card_bloc.dart';
 import 'package:store_app/features/card/managers/card_event.dart';
+import 'package:store_app/features/chat/managers/chat_bloc.dart';
+import 'package:store_app/features/chat/page/chat_page.dart';
 import 'package:store_app/features/home/managers/category_cubit.dart';
 import 'package:store_app/features/home/managers/product_cubit.dart';
 import 'package:store_app/features/my_details/manager/my_detail_bloc.dart';
@@ -181,6 +183,10 @@ final dependencies = <SingleChildWidget>[
     create: (context) => AddressBloc(
       context.read<AddressRepository>(),
     )..add(LoadAddresses()),
+  ),
+  BlocProvider(
+    create: (context) => ChatBloc(),
+    child: ChatPage(),
   ),
 
 ];

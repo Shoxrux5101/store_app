@@ -19,6 +19,7 @@ import '../../features/sign_up/pages/sign_up.dart';
 class AppRouter {
   static final GoRouter router = GoRouter(
     initialLocation: Routes.homePage,
+    // redirect: (){}, //kerakli funksiyalar uchun
     routes: [
       GoRoute(
         path: Routes.splash,
@@ -76,6 +77,7 @@ class AppRouter {
       ),
       GoRoute(
         path: Routes.accountPage,
+        name: "/account",
         builder: (context, state) {
           return AccountPage();
         },

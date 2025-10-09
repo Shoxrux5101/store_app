@@ -10,16 +10,16 @@ class AuthInterceptor extends Interceptor {
 
   final FlutterSecureStorage secureStorage;
   final dio = Dio(
-    BaseOptions(baseUrl: 'http://192.168.0.110:8888/api/v1',validateStatus: (status) => true),
+    BaseOptions(baseUrl: 'http://192.168.9.90:8888/api/v1',validateStatus: (status) => true),
   );
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     var token = await secureStorage.read(key: 'token');
     if(token != null){
-      print("---------------");
-      print(token);
-      print("---------------");
+      // print("---------------");
+      // print(token);
+      // print("---------------");
       options.headers['Authorization'] ='Bearer $token';
     }
     super.onRequest(options, handler);

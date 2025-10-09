@@ -11,6 +11,8 @@ class ChatBloc extends Bloc<ChatEvents, ChatState> {
   ChatBloc() : super(ChatState.initial()) {
     on<ChatMessageReceived>(_onMessageReceived);
     on<ChatMessageSend>(_onMessageSend);
+    on<ChatMessageDelete>(_onMessageDelete);
+    on<ChatMessageEdit>(_onMessageEdit);
     _connect();
   }
 
@@ -19,7 +21,7 @@ class ChatBloc extends Bloc<ChatEvents, ChatState> {
 
   Future<void> _connect() async {
     try {
-      final uri = Uri.parse("ws://192.168.0.110:8888/chat");
+      final uri = Uri.parse("ws://192.168.9.90:8888/chat");
       websocket = WebSocketChannel.connect(uri);
 
       subscription = websocket.stream.listen((message) {
@@ -56,5 +58,26 @@ class ChatBloc extends Bloc<ChatEvents, ChatState> {
     };
     websocket.sink.add(jsonEncode(message));
     emit(state.copyWith(messages: [...state.messages, message]));
+  }
+  Future<void> _onMessageDelete(
+      ChatMessageDelete event,
+      Emitter<ChatState> emit,
+      ) async {
+    final updated = List<Map<String, dynamic>>.from(state.messages);
+    if (event.index >= 0 && event.index < updated.length) {
+      updated.removeAt(event.index);
+      emit(state.copyWith(messages: updated));
+    }
+  }
+  Future<void> _onMessageEdit(
+      ChatMessageEdit event,
+      Emitter<ChatState> emit,
+      ) async {
+    final updated = List<Map<String, dynamic>>.from(state.messages);
+    if (event.index >= 0 && event.index < updated.length) {
+      updated[event.index]["message"] = event.newMessage;
+      updated[event.index]["edited"] = true;
+      emit(state.copyWith(messages: updated));
+    }
   }
 }
