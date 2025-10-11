@@ -22,32 +22,38 @@ class _FAQsPageState extends State<FAQsPage> {
     FAQModel(
       question: "How do I make a purchase?",
       answer:
-      "When you find a product you want to purchase, tap on it to view the product details...",
+      """When you find a product you want to purchase, tap on it to view the product details. Check the price, description, and available options (if applicable), and then tap the "Add to Cart" button. Follow the on-screen instructions to complete the purchase, including providing shipping details and payment information.""",
     ),
     FAQModel(
       question: "What payment methods are accepted?",
       answer:
-      "We accept major credit/debit cards, PayPal, and other payment methods.",
+      """When you find a product you want to purchase, tap on it to view the product details. Check the price, description, and available options (if applicable), and then tap the "Add to Cart" button. Follow the on-screen instructions to complete the purchase, including providing shipping details and payment information.""",
     ),
     FAQModel(
       question: "How do I track my orders?",
-      answer: "Go to 'My Orders' to see order status and tracking info.",
+      answer:"""When you find a product you want to purchase, tap on it to view the product details. Check the price, description, and available options (if applicable), and then tap the "Add to Cart" button. Follow the on-screen instructions to complete the purchase, including providing shipping details and payment information.""",
     ),
     FAQModel(
       question: "Can I cancel or return an order?",
       answer:
-      "Yes, depending on our policy. See 'Returns & Refunds' for details.",
+      """When you find a product you want to purchase, tap on it to view the product details. Check the price, description, and available options (if applicable), and then tap the "Add to Cart" button. Follow the on-screen instructions to complete the purchase, including providing shipping details and payment information.""",
     ),
     FAQModel(
-      question: "How can I contact customer support?",
+      question: "How can I contact customer support for assistance?",
       answer:
-      "You can contact support through the Help Center or Contact Us page.",
+      """When you find a product you want to purchase, tap on it to view the product details. Check the price, description, and available options (if applicable), and then tap the "Add to Cart" button. Follow the on-screen instructions to complete the purchase, including providing shipping details and payment information.""",
+    ),
+    FAQModel(
+      question: "How do I create an account?",
+      answer:
+      """When you find a product you want to purchase, tap on it to view the product details. Check the price, description, and available options (if applicable), and then tap the "Add to Cart" button. Follow the on-screen instructions to complete the purchase, including providing shipping details and payment information.""",
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: BackButton(color: Colors.black),
         title: Text(
@@ -55,7 +61,6 @@ class _FAQsPageState extends State<FAQsPage> {
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
-        elevation: 0,
         centerTitle: true,
         actions: [
           Padding(

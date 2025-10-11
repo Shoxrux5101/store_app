@@ -7,16 +7,33 @@ class MyDetailRepository {
 
   MyDetailRepository({required ApiClient apiClient}) : _apiClient = apiClient;
 
-  Future<Result<MyDetail>> getDetails() async {
+  Future<Result<MyDetail>> getMyDetail() async {
     final response = await _apiClient.get('/auth/me');
 
     return response.fold(
           (error) => Result.error(error),
-          (success) {
-        final data = success as Map<String, dynamic>;
-        final detail = MyDetail.fromJson(data);
-        return Result.ok(detail);
-      },
+          (success) => Result.ok(MyDetail.fromJson(success)),
+    );
+  }
+
+  Future<Result<MyDetail>> updateMyDetail(MyDetail myDetail) async {
+    final response = await _apiClient.patch(
+      '/auth/update',
+      data: myDetail.toJson(),
+    );
+
+    return response.fold(
+          (error) => Result.error(error),
+          (success) => Result.ok(MyDetail.fromJson(success)),
+    );
+  }
+
+  Future<Result<void>> registerMyDetail() async {
+    final response = await _apiClient.post('/auth/register', data: {});
+
+    return response.fold(
+          (error) => Result.error(error),
+          (success) => Result.ok(null),
     );
   }
 }

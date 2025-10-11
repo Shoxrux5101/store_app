@@ -1,8 +1,13 @@
-import 'package:equatable/equatable.dart';
+import '../../../data/models/my_detail_model.dart';
 
-abstract class MyDetailEvent extends Equatable {
-  @override
-  List<Object?> get props => [];
-}
+abstract class MyDetailEvent {}
 
 class LoadMyDetail extends MyDetailEvent {}
+
+class UpdateMyDetail extends MyDetailEvent {
+  final MyDetail myDetail;
+
+  UpdateMyDetail(this.myDetail);
+}
+
+class DeleteMyDetail extends MyDetailEvent {}

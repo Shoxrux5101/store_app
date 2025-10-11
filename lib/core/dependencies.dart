@@ -174,11 +174,11 @@ final dependencies = <SingleChildWidget>[
       repository: context.read<MyCartRepository>(),
     )..add(LoadMyCart()),
   ),
-  // BlocProvider(
-  //   create: (context) => MyDetailBloc(
-  //     repository: context.read<MyDetailRepository>(),
-  //   )..add(LoadMyDetail()),
-  // ),
+  BlocProvider(
+    create: (context) => MyDetailBloc(
+      repository: context.read<MyDetailRepository>(),
+    )..add(LoadMyDetail()),
+  ),
   BlocProvider(
     create: (context) => AddressBloc(
       context.read<AddressRepository>(),
