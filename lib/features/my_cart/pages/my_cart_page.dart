@@ -21,19 +21,9 @@ class MyCartScreen extends StatefulWidget {
 }
 
 class _MyCartScreenState extends State<MyCartScreen> {
-  int _currentIndex = 0;
-
-  final List<String> _routes = [
-    Routes.homePage,
-    Routes.searchPage,
-    Routes.savedPage,
-    Routes.cartPage,
-    Routes.accountPage,
-  ];
   @override
   void initState() {
     super.initState();
-    _currentIndex = 3;
     context.read<MyCartBloc>().add(LoadMyCart());
   }
 
@@ -108,15 +98,6 @@ class _MyCartScreenState extends State<MyCartScreen> {
               ),
             );
           }
-        },
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-          context.go(_routes[index]);
         },
       ),
     );

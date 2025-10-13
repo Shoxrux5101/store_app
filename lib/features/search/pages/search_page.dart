@@ -20,20 +20,6 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  int _currentIndex = 0;
-
-  final List<String> _routes = [
-    Routes.homePage,
-    Routes.searchPage,
-    Routes.savedPage,
-    Routes.cartPage,
-    Routes.accountPage,
-  ];
-  @override
-  void initState() {
-    super.initState();
-    _currentIndex = 1;
-  }
 
   final TextEditingController _controller = TextEditingController();
   final List<String> _recent = [
@@ -133,15 +119,6 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ],
           ),
-        ),
-        bottomNavigationBar: CustomBottomNavBar(
-          currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-            context.go(_routes[index]);
-          },
         ),
       ),
     );

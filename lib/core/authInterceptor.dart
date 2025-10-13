@@ -6,7 +6,7 @@ class AuthInterceptor extends Interceptor {
 
   final FlutterSecureStorage secureStorage;
   final dio = Dio(
-    BaseOptions(baseUrl: 'http://192.168.0.101:8888/api/v1',validateStatus: (status) => true),
+    BaseOptions(baseUrl: 'http://192.168.0.100:8888/api/v1',validateStatus: (status) => true),
   );
 
   @override

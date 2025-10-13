@@ -12,16 +12,6 @@ class NotificationSettingsPage extends StatefulWidget {
 }
 
 class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
-  int _currentIndex = 0;
-
-  final List<String> _routes = [
-    Routes.homePage,
-    Routes.searchPage,
-    Routes.savedPage,
-    Routes.cartPage,
-    Routes.accountPage,
-  ];
-
   bool generalNotifications = true;
   bool sound = true;
   bool vibrate = false;
@@ -29,7 +19,6 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   @override
   void initState() {
     super.initState();
-    _currentIndex = 4;
     _loadSettings();
   }
 
@@ -108,16 +97,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
           ],
         ),
       ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-          context.go(_routes[index]);
-        },
-      ),
-    );
+          );
   }
 
   Widget _buildSettingItem(String title, bool value, Function(bool) onChanged) {

@@ -19,15 +19,6 @@ class SavedPage extends StatefulWidget {
 }
 
 class _SavedPageState extends State<SavedPage> {
-  int _currentIndex = 2;
-  final List<String> _routes = [
-    Routes.homePage,
-    Routes.searchPage,
-    Routes.savedPage,
-    Routes.cartPage,
-    Routes.accountPage,
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -140,15 +131,6 @@ class _SavedPageState extends State<SavedPage> {
             return Center(child: Text(state.message));
           }
           return const SizedBox();
-        },
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-          context.go(_routes[index]);
         },
       ),
     );

@@ -19,21 +19,6 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  int _currentIndex = 0;
-
-  final List<String> _routes = [
-    Routes.homePage,
-    Routes.searchPage,
-    Routes.savedPage,
-    Routes.cartPage,
-    Routes.accountPage,
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    _currentIndex = 4;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -187,15 +172,6 @@ class _AccountPageState extends State<AccountPage> {
             ),
           ),
         ],
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-          context.go(_routes[index]);
-        },
       ),
     );
   }

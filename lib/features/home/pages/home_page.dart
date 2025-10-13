@@ -24,15 +24,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _currentIndex = 0;
-
-  final List<String> _routes = [
-    Routes.homePage,
-    Routes.searchPage,
-    Routes.savedPage,
-    Routes.cartPage,
-    Routes.accountPage,
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -104,15 +95,6 @@ class _HomePageState extends State<HomePage> {
               ProductsGridWidget(),
             ],
           ),
-        ),
-        bottomNavigationBar: CustomBottomNavBar(
-          currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-            context.go(_routes[index]);
-          },
         ),
       ),
     );

@@ -15,15 +15,7 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  int _currentIndex = 0;
 
-  final List<String> _routes = [
-    Routes.homePage,
-    Routes.searchPage,
-    Routes.savedPage,
-    Routes.cartPage,
-    Routes.accountPage,
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,15 +111,6 @@ class _NotificationPageState extends State<NotificationPage> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-          context.go(_routes[index]);
-        },
       ),
     );
   }

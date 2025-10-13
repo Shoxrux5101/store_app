@@ -148,8 +148,7 @@ class _MyDetailsScreenState extends State<MyDetailsScreen> {
                   GenderDropdown(
                     genders: _genders,
                     selectedGender: _selectedGender,
-                    onChanged: (v) => setState(() => _selectedGender = v),
-                  ),
+                    onChanged: (v) => setState(() => _selectedGender = v)),
                   SizedBox(height: 20),
                   FormLabel(text: 'Phone Number'),
                   SizedBox(height: 8),
