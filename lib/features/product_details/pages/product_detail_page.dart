@@ -6,7 +6,6 @@ import 'package:store_app/core/routes/routes.dart';
 import 'package:store_app/features/my_cart/managers/my_cart_bloc.dart';
 import 'package:store_app/features/product_details/managers/product_detail_bloc.dart';
 import 'package:store_app/features/product_details/managers/product_detail_state.dart';
-import '../../../data/models/my_cart_model.dart';
 import '../../my_cart/managers/my_cart_event.dart';
 import '../managers/product_detail_even.dart';
 
@@ -35,7 +34,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             icon: Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () => Navigator.pop(context),
           ),
-          title: const Text(
+          title: Text(
             'Details',
             style: TextStyle(
               color: Colors.black,
@@ -46,7 +45,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           centerTitle: true,
           actions: [
             IconButton(
-              icon: const Icon(Icons.notifications_outlined, color: Colors.black),
+              icon: SvgPicture.asset("assets/icons/Bell.svg"),
               onPressed: () {},
             ),
           ],
@@ -54,7 +53,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         body: BlocBuilder<ProductDetailBloc, ProductDetailState>(
           builder: (context, state) {
             if (state is ProductDetailLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return Center(child: CircularProgressIndicator());
             } else if (state is ProductDetailLoaded) {
               final product = state.product;
               return Column(
@@ -62,7 +61,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   Container(
                     width: double.infinity,
                     height: 400,
-                    color: const Color(0xFFF5F5F5),
+                    color: Color(0xFFF5F5F5),
                     child: Stack(
                       children: [
                         Center(
@@ -75,8 +74,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             fit: BoxFit.contain,
                             errorBuilder: (context, error, stackTrace) {
                               return Container(
-                                color: const Color(0xFFF5F5F5),
-                                child: const Center(
+                                color: Color(0xFFF5F5F5),
+                                child: Center(
                                   child: Icon(Icons.image, size: 50, color: Colors.grey),
                                 ),
                               );
@@ -96,11 +95,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.1),
                                   blurRadius: 8,
-                                  offset: const Offset(0, 2),
+                                  offset: Offset(0, 2),
                                 ),
                               ],
                             ),
-                            child: const Icon(
+                            child: Icon(
                               Icons.favorite_border,
                               color: Colors.black,
                               size: 20,
@@ -113,20 +112,22 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   Expanded(
                     child: Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(20),
+                      padding: EdgeInsets.all(20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             product.title,
-                            style: const TextStyle(
-                              fontSize: 24,
+                            style: TextStyle(
+                              fontSize: 22,
                               fontWeight: FontWeight.w600,
                               color: Colors.black,
                               height: 1.2,
                             ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: 8),
                           GestureDetector(
                             onTap: () {
                               context.push(
@@ -136,12 +137,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             },
                             child: Row(
                               children: [
-                                const Icon(Icons.star, color: Colors.amber, size: 20),
-                                const SizedBox(width: 4),
+                                Icon(Icons.star, color: Colors.amber, size: 18),
+                                SizedBox(width: 4),
                                 Text(
                                   "${product.rating}",
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                     color: Colors.black,
                                   ),
@@ -149,40 +150,44 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 Text(
                                   "/5",
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     color: Colors.grey[600],
                                   ),
                                 ),
-                                const SizedBox(width: 8),
+                                SizedBox(width: 6),
                                 Text(
                                   "(${product.reviewsCount} reviews)",
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     color: Colors.grey[600],
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          const SizedBox(height: 16),
-                          Text(
-                            product.description,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[600],
-                              height: 1.4,
+                          SizedBox(height: 12),
+                          Expanded(
+                            child: Text(
+                              product.description,
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.grey[600],
+                                height: 1.3,
+                              ),
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          const SizedBox(height: 24),
-                          const Text(
+                          SizedBox(height: 8),
+                          Text(
                             "Choose size",
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 16,
                               fontWeight: FontWeight.w600,
                               color: Colors.black,
                             ),
                           ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: 8),
                           Row(
                             children: product.productSizes.asMap().entries.map((entry) {
                               int index = entry.key;
@@ -190,7 +195,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               bool isSelected = selectedSizeIndex == index;
 
                               return Padding(
-                                padding: const EdgeInsets.only(right: 12),
+                                padding: EdgeInsets.only(right: 12),
                                 child: GestureDetector(
                                   onTap: () {
                                     setState(() {
@@ -223,7 +228,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               );
                             }).toList(),
                           ),
-                          Spacer(),
+                          SizedBox(height: 16),
                           Row(
                             children: [
                               Column(
@@ -237,13 +242,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                       color: Colors.grey[600],
                                     ),
                                   ),
-                                  const SizedBox(height: 4),
+                                  SizedBox(height: 4),
                                   Text(
                                     "\$ ${product.price.toStringAsFixed(0).replaceAllMapped(
                                       RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
                                           (Match m) => '${m[1]},',
                                     )}",
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 24,
                                       fontWeight: FontWeight.w600,
                                       color: Colors.black,
@@ -251,34 +256,24 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   ),
                                 ],
                               ),
-                              const SizedBox(width: 20),
+                              SizedBox(width: 20),
                               Expanded(
                                 child: Container(
                                   height: 50,
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      print("Add to cart tugmasi bosildi");
                                       if (product.productSizes.isNotEmpty && selectedSizeIndex == -1) {
                                         ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(content: Text("Iltimos, o‘lchamni tanlang")),
+                                          SnackBar(content: Text("Iltimos, o'lchamni tanlang")),
                                         );
                                         return;
                                       }
                                       final int selectedSize = product.productSizes.isNotEmpty
                                           ? product.productSizes[selectedSizeIndex].id
                                           : 0;
-                                      // final item = MyCartProductItem(
-                                      //   id: 0,
-                                      //   productId: product.id,
-                                      //   title: product.title,
-                                      //   size: selectedSize,
-                                      //   price: product.price,
-                                      //   image: product.productImages.isNotEmpty ? product.productImages.first.image : '',
-                                      //   quantity: 1,
-                                      // );
                                       context.read<MyCartBloc>().add(AddMyCartProduct(product.id, selectedSize));
                                       ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(content: Text("Mahsulot savatchaga qo‘shildi")),
+                                        SnackBar(content: Text("Mahsulot savatchaga qo'shildi")),
                                       );
                                     },
                                     style: ElevatedButton.styleFrom(
@@ -301,8 +296,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                           ),
                                           child: SvgPicture.asset('assets/icons/Bag.svg',color: Colors.black,),
                                         ),
-                                        const SizedBox(width: 12),
-                                        const Text(
+                                        SizedBox(width: 12),
+                                        Text(
                                           "Add to Cart",
                                           style: TextStyle(
                                             fontSize: 16,
@@ -316,7 +311,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20),
+                          SizedBox(height: 20),
                         ],
                       ),
                     ),
@@ -327,11 +322,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               return Center(
                 child: Text(
                   "Error: ${state.message}",
-                  style: const TextStyle(color: Colors.red),
+                  style: TextStyle(color: Colors.red),
                 ),
               );
             }
-            return const SizedBox();
+            return SizedBox();
           },
         ),
       ),

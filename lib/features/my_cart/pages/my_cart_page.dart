@@ -92,8 +92,8 @@ class _MyCartScreenState extends State<MyCartScreen> {
               child: Column(
                 children: [
                   SvgPicture.asset('assets/icons/Cart-duotone.svg',width: 64,height: 64,),
-                  const Text('Your Cart Is Empty!',style: TextStyle(fontWeight: FontWeight.w600,fontSize: 20,),),
-                  const Text('When you add products, they’ll appear here.',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400,),maxLines: 2,),
+                  Text('Your Cart Is Empty!',style: TextStyle(fontWeight: FontWeight.w600,fontSize: 20,),),
+                  Text('When you add products, they’ll appear here.',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400,),maxLines: 2,),
                 ],
               ),
             );

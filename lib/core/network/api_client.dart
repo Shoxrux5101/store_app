@@ -6,7 +6,7 @@ class ApiClient {
   ApiClient({required this.interceptor}){
     _dio = Dio(
       BaseOptions(
-        baseUrl: "http://192.168.0.100:8888/api/v1",
+        baseUrl: "http://192.168.0.105:8888/api/v1",
         connectTimeout: Duration(seconds: 5),
         receiveTimeout: Duration(seconds: 5),
         validateStatus: (status) => true,
@@ -60,14 +60,14 @@ class ApiClient {
     }
   }
 
-  Future<Result> delete (String path) async {
-    try{
+  Future<Result<T>> delete<T>(String path) async {
+    try {
       var response = await _dio.delete(path);
-      if (response.statusCode != 204){
-        return Result.error(response.data);
+      if (response.statusCode == 204 || response.statusCode == 200) {
+        return Result.ok(response.data as T);
       }
-      return Result.ok(response.data);
-    }on Exception catch(e){
+      return Result.error(Exception(response.data?.toString() ?? 'Delete failed'));
+    } on Exception catch (e) {
       return Result.error(e);
     }
   }

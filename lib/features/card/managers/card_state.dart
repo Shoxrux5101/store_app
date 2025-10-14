@@ -1,18 +1,22 @@
 import 'package:equatable/equatable.dart';
-import 'package:store_app/data/models/card_item_model.dart';
+import '../../../data/models/card_item_model.dart';
 
-sealed class CardState extends Equatable {
+abstract class CardState extends Equatable {
   const CardState();
 
   @override
   List<Object?> get props => [];
 }
 
-final class CardInitial extends CardState {}
+class CardInitial extends CardState {
+  const CardInitial();
+}
 
-final class CardLoading extends CardState {}
+class CardLoading extends CardState {
+  const CardLoading();
+}
 
-final class CardLoaded extends CardState {
+class CardLoaded extends CardState {
   final List<CardModel> cards;
 
   const CardLoaded(this.cards);
@@ -21,7 +25,41 @@ final class CardLoaded extends CardState {
   List<Object?> get props => [cards];
 }
 
-final class CardError extends CardState {
+class CardAdding extends CardState {
+  const CardAdding();
+}
+
+class CardAdded extends CardState {
+  final CardModel card;
+
+  const CardAdded(this.card);
+
+  @override
+  List<Object?> get props => [card];
+}
+
+class CardDeleting extends CardState {
+  const CardDeleting();
+}
+
+class CardDeleted extends CardState {
+  const CardDeleted();
+}
+
+class CardUpdating extends CardState {
+  const CardUpdating();
+}
+
+class CardUpdated extends CardState {
+  final CardModel card;
+
+  const CardUpdated(this.card);
+
+  @override
+  List<Object?> get props => [card];
+}
+
+class CardError extends CardState {
   final String message;
 
   const CardError(this.message);
