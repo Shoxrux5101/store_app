@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../../core/network/api_client.dart';
 import '../../core/utils/result.dart';
 import '../models/product_model.dart';
@@ -15,39 +17,38 @@ class ProductRepository {
     double? maxPrice,
     String? orderBy,
   }) async {
-    Map<String, dynamic> queryParams = {};
+    try {
+      Map<String, dynamic> queryParams = {};
+      if (title != null && title.isNotEmpty) queryParams['Title'] = title;
+      if (categoryId != null) queryParams['CategoryId'] = categoryId;
+      if (sizeId != null) queryParams['SizeId'] = sizeId;
+      if (minPrice != null) queryParams['MinPrice'] = minPrice;
+      if (maxPrice != null) queryParams['MaxPrice'] = maxPrice;
+      if (orderBy != null && orderBy.isNotEmpty) queryParams['OrderBy'] = orderBy;
 
-    if (title != null && title.isNotEmpty) {
-      queryParams['Title'] = title;
-    }
-    if (categoryId != null) {
-      queryParams['CategoryId'] = categoryId;
-    }
-    if (sizeId != null) {
-      queryParams['SizeId'] = sizeId;
-    }
-    if (minPrice != null) {
-      queryParams['MinPrice'] = minPrice;
-    }
-    if (maxPrice != null) {
-      queryParams['MaxPrice'] = maxPrice;
-    }
-    if (orderBy != null && orderBy.isNotEmpty) {
-      queryParams['OrderBy'] = orderBy;
-    }
+      final response = await _apiClient.get('/products/list', queryParams: queryParams);
 
-    final response = await _apiClient.get('/products/list', queryParams: queryParams);
 
-    return response.fold(
-          (error) => Result.error(error),
-          (success) {
-        final data = (success as List)
-            .map((e) => ProductModel.fromJson(e))
-            .toList();
-        return Result.ok(data);
-      },
-    );
+      return response.fold(
+            (error) => Result.error(error),
+            (success) {
+          try {
+            print(success);
+            final data = (success as List)
+                .map((e) => ProductModel.fromJson(e))
+                .toList();
+            return Result.ok(data);
+          } catch (e, s) {
+            print(s);
+            return Result.error(Exception("Unexpected API response format: $e"));
+          }
+        },
+      );
+    } catch (e) {
+      return Result.error(Exception("Failed to fetch products: $e"));
+    }
   }
+
 
   Future<Result<List<ProductModel>>> getAllProducts() async {
     return getProducts();

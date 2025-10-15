@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:store_app/features/home/widgets/custom_button.dart';
-
 import '../managers/card_bloc.dart';
 import '../managers/card_event.dart';
 import '../managers/card_state.dart';
+import '../widgets/card_item_widget.dart';
+import '../widgets/add_card_button.dart';
+import '../widgets/delete_card_dialog.dart';
 import 'new_cards_page.dart';
-
 
 class CardsScreen extends StatefulWidget {
   const CardsScreen({super.key});
@@ -16,17 +17,42 @@ class CardsScreen extends StatefulWidget {
 }
 
 class _CardsScreenState extends State<CardsScreen> {
+  int? _selectedCardId;
+
   @override
   void initState() {
     super.initState();
-    context.read<CardBloc>().add(const LoadCards());
+    context.read<CardBloc>().add(LoadCards());
+  }
+
+  void _handleCardDelete(int cardId) {
+    DeleteCardDialog.show(
+      context: context,
+      onConfirm: () {
+        context.read<CardBloc>().add(DeleteCard(cardId));
+        Future.delayed(const Duration(milliseconds: 300), () {
+          context.read<CardBloc>().add(LoadCards());
+        });
+      },
+    );
+  }
+
+  void _handleAddNewCard() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => NewCardPage()),
+    );
+    context.read<CardBloc>().add(LoadCards());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("My Cards", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+        title: const Text(
+          "Payment Method",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+        ),
         centerTitle: true,
       ),
       body: BlocBuilder<CardBloc, CardState>(
@@ -35,38 +61,50 @@ class _CardsScreenState extends State<CardsScreen> {
             return const Center(child: CircularProgressIndicator());
           } else if (state is CardLoaded) {
             final cards = state.cards;
-            return Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: cards.length,
-                    itemBuilder: (context, index) {
-                      final card = cards[index];
-                      return ListTile(
-                        title: Text(card.cardNumber),
-                        subtitle: Text(card.cardType ?? "Unknown"),
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete, color: Colors.red),
-                          onPressed: () {
-                            context.read<CardBloc>().add(DeleteCard(card.id!));
-                          },
-                        ),
-                      );
-                    },
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 8),
+                  const Text(
+                    "Saved Cards",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: CustomButton(text: "Add New Card", onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => NewCardPage()));}),
-                )
-              ],
+                  const SizedBox(height: 12),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: cards.length,
+                      itemBuilder: (context, index) {
+                        final card = cards[index];
+                        final cardNumber = card.cardNumber ?? '';
+                        final isSelected = card.id == _selectedCardId;
+                        final isDefault = index == 0;
+
+                        return CardItemWidget(
+                          id: card.id!,
+                          cardNumber: cardNumber,
+                          isSelected: isSelected,
+                          isDefault: isDefault,
+                          onLongPress: () => _handleCardDelete(card.id!),
+                          onRadioChanged: (value) {
+                            setState(() => _selectedCardId = value);
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  AddCardButton(onTap: _handleAddNewCard),
+                  const SizedBox(height: 20),
+                  CustomButton(text: "Apply", onTap: () {}),
+                ],
+              ),
             );
           } else if (state is CardError) {
             return Center(child: Text(state.message));
-          } else {
-            return SizedBox();
           }
+          return const SizedBox();
         },
       ),
     );

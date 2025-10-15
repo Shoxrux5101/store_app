@@ -13,15 +13,16 @@ class ApiClient {
       ),
     )..interceptors.add(
       interceptor,
-      // LogInterceptor(
-      //   request: true,
-      //   requestHeader: true,
-      //   requestBody: true,
-      //   responseHeader: true,
-      //   responseBody: true,
-      //   error: true,
-      //   logPrint: (obj) => print(obj),
-    );
+    )..interceptors.add(
+        LogInterceptor(
+          request: true,
+          requestHeader: true,
+          requestBody: true,
+          responseHeader: true,
+          responseBody: true,
+          error: true,
+          logPrint: (obj) => print(obj), // konsolga chiqaradi
+        ));
   }
   final AuthInterceptor interceptor;
 

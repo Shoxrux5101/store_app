@@ -36,6 +36,7 @@ class CardModel {
     if (RegExp(r'^5[1-5]').hasMatch(clean)) return 'MASTERCARD';
     if (RegExp(r'^(34|37)').hasMatch(clean)) return 'AMEX';
     if (RegExp(r'^(86|60)').hasMatch(clean)) return 'UZCARD';
+    if (RegExp(r'^98').hasMatch(clean)) return 'HUMO';
     return 'CARD';
   }
 }

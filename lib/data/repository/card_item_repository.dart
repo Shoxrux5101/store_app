@@ -1,6 +1,3 @@
-
-
-// ============ REPOSITORY ============
 import 'package:store_app/core/network/api_client.dart';
 import 'package:store_app/core/utils/result.dart';
 import '../models/card_item_model.dart';
@@ -12,7 +9,6 @@ class CardRepository {
 
   Future<Result<List<CardModel>>> getCards() async {
     final response = await _apiClient.get('/cards');
-
     return response.fold(
           (error) => Result.error(error),
           (success) {
@@ -22,17 +18,15 @@ class CardRepository {
             if (cardsData is List) {
               final cards = cardsData.map((e) => CardModel.fromJson(e)).toList();
               return Result.ok(cards);
-            } else {
-              return Result.ok([]);
             }
+            return Result.ok([]);
           } else if (success is List) {
             final cards = success.map((e) => CardModel.fromJson(e)).toList();
             return Result.ok(cards);
-          } else {
-            return Result.ok([]);
           }
+          return Result.ok([]);
         } catch (e) {
-          return Result.error(Exception("Failed to parse cards: $e"));
+          return Result.error(Exception('Failed to parse cards: $e'));
         }
       },
     );
@@ -51,7 +45,6 @@ class CardRepository {
         'securityCode': securityCode,
       },
     );
-
     return response.fold(
           (error) => Result.error(error),
           (success) {
@@ -59,7 +52,7 @@ class CardRepository {
           final data = success as Map<String, dynamic>;
           return Result.ok(CardModel.fromJson(data));
         } catch (e) {
-          return Result.error(Exception("Failed to add card: $e"));
+          return Result.error(Exception('Failed to add card: $e'));
         }
       },
     );
@@ -87,7 +80,6 @@ class CardRepository {
         'securityCode': securityCode,
       },
     );
-
     return response.fold(
           (error) => Result.error(error),
           (success) {
@@ -95,7 +87,7 @@ class CardRepository {
           final data = success as Map<String, dynamic>;
           return Result.ok(CardModel.fromJson(data));
         } catch (e) {
-          return Result.error(Exception("Failed to update card: $e"));
+          return Result.error(Exception('Failed to update card: $e'));
         }
       },
     );

@@ -2,68 +2,46 @@ import 'package:equatable/equatable.dart';
 import '../../../data/models/card_item_model.dart';
 
 abstract class CardState extends Equatable {
-  const CardState();
-
   @override
   List<Object?> get props => [];
 }
 
-class CardInitial extends CardState {
-  const CardInitial();
-}
+class CardInitial extends CardState {}
 
-class CardLoading extends CardState {
-  const CardLoading();
-}
+class CardLoading extends CardState {}
 
 class CardLoaded extends CardState {
   final List<CardModel> cards;
-
-  const CardLoaded(this.cards);
-
+  CardLoaded(this.cards);
   @override
   List<Object?> get props => [cards];
 }
 
-class CardAdding extends CardState {
-  const CardAdding();
-}
+class CardAdding extends CardState {}
 
 class CardAdded extends CardState {
   final CardModel card;
-
-  const CardAdded(this.card);
-
+  CardAdded(this.card);
   @override
   List<Object?> get props => [card];
 }
 
-class CardDeleting extends CardState {
-  const CardDeleting();
-}
+class CardDeleting extends CardState {}
 
-class CardDeleted extends CardState {
-  const CardDeleted();
-}
+class CardDeleted extends CardState {}
 
-class CardUpdating extends CardState {
-  const CardUpdating();
-}
+class CardUpdating extends CardState {}
 
 class CardUpdated extends CardState {
   final CardModel card;
-
-  const CardUpdated(this.card);
-
+  CardUpdated(this.card);
   @override
   List<Object?> get props => [card];
 }
 
 class CardError extends CardState {
   final String message;
-
-  const CardError(this.message);
-
+  CardError(this.message);
   @override
   List<Object?> get props => [message];
 }

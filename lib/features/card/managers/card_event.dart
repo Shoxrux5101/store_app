@@ -1,4 +1,3 @@
-// ============ EVENT ============
 import 'package:equatable/equatable.dart';
 
 abstract class CardEvent extends Equatable {
