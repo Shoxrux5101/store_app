@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../data/repository/my_cart_repository.dart';
-import '../../../data/models/my_cart_model.dart';
 import 'my_cart_event.dart';
 import 'my_cart_state.dart';
 
@@ -65,48 +64,46 @@ class MyCartBloc extends Bloc<MyCartEvent, MyCartState> {
     if (currentState is MyCartLoaded) {
       final oldCart = currentState.cart;
 
+      // 1. UI’da darhol yangilash
       final updatedItems = oldCart.items.map((item) {
         if (item.id == event.itemId) {
-          return MyCartProductItem(
-            id: item.id,
-            productId: item.productId,
-            title: item.title,
-            size: item.size,
-            price: item.price,
-            image: item.image,
-            quantity: event.quantity,
-          );
+          return item.copyWith(quantity: event.quantity);
         }
         return item;
       }).toList();
 
-      double tempSubTotal = 0;
-      for (var item in updatedItems) {
-        tempSubTotal += item.price * item.quantity;
-      }
-
+      final tempSubTotal = updatedItems.fold<double>(
+        0,
+            (sum, item) => sum + item.price * item.quantity,
+      );
       final tempVat = tempSubTotal * 0.15;
       final tempTotal = tempSubTotal + tempVat + oldCart.shippingFee;
 
-      final updatedCart = MyCartItemModel(
+      final updatedCart = oldCart.copyWith(
         items: updatedItems,
         subTotal: tempSubTotal,
         vat: tempVat,
-        shippingFee: oldCart.shippingFee,
         total: tempTotal,
       );
 
       emit(MyCartLoaded(updatedCart));
 
+      // 2. API update qilish
       final result = await repository.updateQuantity(
         itemId: event.itemId,
         quantity: event.quantity,
       );
 
+      // 3. Agar API xatolik bo‘lsa, eski holatga qaytarish
       result.fold(
-            (error) => emit(MyCartLoaded(oldCart)),
-            (cart) => emit(MyCartLoaded(cart)),
+            (error) {
+          emit(MyCartLoaded(oldCart));
+        },
+            (_) {
+          // Agar kerak bo‘lsa API’dan kelgan yangi cart data bilan update qilamiz
+        },
       );
     }
   }
+
 }

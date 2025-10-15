@@ -6,7 +6,7 @@ class ApiClient {
   ApiClient({required this.interceptor}){
     _dio = Dio(
       BaseOptions(
-        baseUrl: "http://192.168.0.105:8888/api/v1",
+        baseUrl: "http://192.168.0.104:8888/api/v1",
         connectTimeout: Duration(seconds: 5),
         receiveTimeout: Duration(seconds: 5),
         validateStatus: (status) => true,
@@ -16,12 +16,12 @@ class ApiClient {
     )..interceptors.add(
         LogInterceptor(
           request: true,
-          requestHeader: true,
-          requestBody: true,
-          responseHeader: true,
-          responseBody: true,
+          // requestHeader: true,
+          // requestBody: true,
+          // responseHeader: true,
+          // responseBody: true,
           error: true,
-          logPrint: (obj) => print(obj), // konsolga chiqaradi
+          // logPrint: (obj) => print(obj),
         ));
   }
   final AuthInterceptor interceptor;

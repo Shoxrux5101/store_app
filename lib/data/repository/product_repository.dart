@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import '../../core/network/api_client.dart';
 import '../../core/utils/result.dart';
 import '../models/product_model.dart';
@@ -18,7 +16,7 @@ class ProductRepository {
     String? orderBy,
   }) async {
     try {
-      Map<String, dynamic> queryParams = {};
+      final queryParams = <String, dynamic>{};
       if (title != null && title.isNotEmpty) queryParams['Title'] = title;
       if (categoryId != null) queryParams['CategoryId'] = categoryId;
       if (sizeId != null) queryParams['SizeId'] = sizeId;
@@ -28,20 +26,13 @@ class ProductRepository {
 
       final response = await _apiClient.get('/products/list', queryParams: queryParams);
 
-
       return response.fold(
             (error) => Result.error(error),
             (success) {
-          try {
-            print(success);
-            final data = (success as List)
-                .map((e) => ProductModel.fromJson(e))
-                .toList();
-            return Result.ok(data);
-          } catch (e, s) {
-            print(s);
-            return Result.error(Exception("Unexpected API response format: $e"));
-          }
+          final data = (success as List)
+              .map((e) => ProductModel.fromJson(e))
+              .toList();
+          return Result.ok(data);
         },
       );
     } catch (e) {
@@ -49,23 +40,32 @@ class ProductRepository {
     }
   }
 
+  Future<Result<List<ProductModel>>> getAllProducts() async => getProducts();
 
-  Future<Result<List<ProductModel>>> getAllProducts() async {
-    return getProducts();
-  }
+  Future<Result<List<ProductModel>>> getProductsByCategory(int categoryId) async =>
+      getProducts(categoryId: categoryId);
 
-  Future<Result<List<ProductModel>>> getProductsByCategory(int categoryId) async {
-    return getProducts(categoryId: categoryId);
-  }
-
-  Future<Result<List<ProductModel>>> searchProducts(String title) async {
-    return getProducts(title: title);
-  }
+  Future<Result<List<ProductModel>>> searchProducts(String title) async =>
+      getProducts(title: title);
 
   Future<Result<List<ProductModel>>> getProductsByPriceRange({
     required double minPrice,
     required double maxPrice,
-  }) async {
-    return getProducts(minPrice: minPrice, maxPrice: maxPrice);
+  }) async =>
+      getProducts(minPrice: minPrice, maxPrice: maxPrice);
+
+  Future<Result<void>> toggleLike(int productId, bool isLiked) async {
+    try {
+      final response = await _apiClient.post(
+        '/products/toggle-like',
+        data: {'productId': productId, 'isLiked': isLiked},
+      );
+      return response.fold(
+            (error) => Result.error(error),
+            (_) => Result.ok(null),
+      );
+    } catch (e) {
+      return Result.error(Exception("Failed to toggle like: $e"));
+    }
   }
 }

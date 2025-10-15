@@ -6,6 +6,7 @@ import 'package:store_app/core/routes/routes.dart';
 import 'package:store_app/features/my_cart/managers/my_cart_bloc.dart';
 import 'package:store_app/features/product_details/managers/product_detail_bloc.dart';
 import 'package:store_app/features/product_details/managers/product_detail_state.dart';
+import 'package:store_app/features/saved/widgets/favourite_button.dart';
 import '../../my_cart/managers/my_cart_event.dart';
 import '../managers/product_detail_even.dart';
 
@@ -36,17 +37,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
           title: Text(
             'Details',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-            ),
+            style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500),
           ),
           centerTitle: true,
           actions: [
             IconButton(
               icon: SvgPicture.asset("assets/icons/Bell.svg"),
-              onPressed: () {},
+              onPressed: () {
+                context.go(Routes.notification);
+              },
             ),
           ],
         ),
@@ -66,9 +65,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       children: [
                         Center(
                           child: Image.network(
-                            product.productImages.isNotEmpty
-                                ? product.productImages.first.image
-                                : "",
+                            product.productImages.isNotEmpty ? product.productImages.first.image : "",
                             width: double.infinity,
                             height: 400,
                             fit: BoxFit.contain,
@@ -85,27 +82,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         Positioned(
                           top: 20,
                           right: 20,
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  blurRadius: 8,
-                                  offset: Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: Icon(
-                              Icons.favorite_border,
-                              color: Colors.black,
-                              size: 20,
-                            ),
+                          child: FavouriteButton(
+                            product: product,
+                            size: 30,
+                            iconSize: 20,
                           ),
                         ),
+
                       ],
                     ),
                   ),
@@ -118,50 +101,23 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         children: [
                           Text(
                             product.title,
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                              height: 1.2,
-                            ),
+                            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: Colors.black, height: 1.2),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                           SizedBox(height: 8),
                           GestureDetector(
                             onTap: () {
-                              context.push(
-                                Routes.reviewPage,
-                                extra: widget.productId,
-                              );
+                              context.push(Routes.reviewPage, extra: widget.productId);
                             },
                             child: Row(
                               children: [
                                 Icon(Icons.star, color: Colors.amber, size: 18),
                                 SizedBox(width: 4),
-                                Text(
-                                  "${product.rating}",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                Text(
-                                  "/5",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
+                                Text("${product.rating}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black)),
+                                Text("/5", style: TextStyle(fontSize: 14, color: Colors.grey[600])),
                                 SizedBox(width: 6),
-                                Text(
-                                  "(${product.reviewsCount} reviews)",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
+                                Text("(${product.reviewsCount} reviews)", style: TextStyle(fontSize: 14, color: Colors.grey[600])),
                               ],
                             ),
                           ),
@@ -169,31 +125,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           Expanded(
                             child: Text(
                               product.description,
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.grey[600],
-                                height: 1.3,
-                              ),
+                              style: TextStyle(fontSize: 13, color: Colors.grey[600], height: 1.3),
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           SizedBox(height: 8),
-                          Text(
-                            "Choose size",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                            ),
-                          ),
+                          Text("Choose size", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black)),
                           SizedBox(height: 8),
                           Row(
                             children: product.productSizes.asMap().entries.map((entry) {
                               int index = entry.key;
                               var size = entry.value;
                               bool isSelected = selectedSizeIndex == index;
-
                               return Padding(
                                 padding: EdgeInsets.only(right: 12),
                                 child: GestureDetector(
@@ -208,19 +152,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                     decoration: BoxDecoration(
                                       color: isSelected ? Colors.black : Colors.white,
                                       borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(
-                                        color: isSelected ? Colors.black : Colors.grey[300]!,
-                                        width: 1,
-                                      ),
+                                      border: Border.all(color: isSelected ? Colors.black : Colors.grey[300]!, width: 1),
                                     ),
                                     child: Center(
                                       child: Text(
                                         size.title,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          color: isSelected ? Colors.white : Colors.black,
-                                        ),
+                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: isSelected ? Colors.white : Colors.black),
                                       ),
                                     ),
                                   ),
@@ -234,25 +171,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    "Price",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.grey[600],
-                                    ),
-                                  ),
+                                  Text("Price", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Colors.grey[600])),
                                   SizedBox(height: 4),
                                   Text(
-                                    "\$ ${product.price.toStringAsFixed(0).replaceAllMapped(
-                                      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                                          (Match m) => '${m[1]},',
-                                    )}",
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black,
-                                    ),
+                                    "\$ ${product.price.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}",
+                                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black),
                                   ),
                                 ],
                               ),
@@ -263,26 +186,20 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   child: ElevatedButton(
                                     onPressed: () {
                                       if (product.productSizes.isNotEmpty && selectedSizeIndex == -1) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(content: Text("Iltimos, o'lchamni tanlang")),
-                                        );
+                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Iltimos, o'lchamni tanlang")));
                                         return;
                                       }
                                       final int selectedSize = product.productSizes.isNotEmpty
                                           ? product.productSizes[selectedSizeIndex].id
                                           : 0;
                                       context.read<MyCartBloc>().add(AddMyCartProduct(product.id, selectedSize));
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text("Mahsulot savatchaga qo'shildi")),
-                                      );
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Mahsulot savatchaga qo'shildi")));
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.black,
                                       foregroundColor: Colors.white,
                                       elevation: 0,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                     ),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -290,20 +207,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                         Container(
                                           width: 20,
                                           height: 20,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(4),
-                                          ),
-                                          child: SvgPicture.asset('assets/icons/Bag.svg',color: Colors.black,),
+                                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4)),
+                                          child: SvgPicture.asset('assets/icons/Bag.svg', color: Colors.black),
                                         ),
                                         SizedBox(width: 12),
-                                        Text(
-                                          "Add to Cart",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
+                                        Text("Add to Cart", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
                                       ],
                                     ),
                                   ),
@@ -319,12 +227,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 ],
               );
             } else if (state is ProductDetailError) {
-              return Center(
-                child: Text(
-                  "Error: ${state.message}",
-                  style: TextStyle(color: Colors.red),
-                ),
-              );
+              return Center(child: Text("Error: ${state.message}", style: TextStyle(color: Colors.red)));
             }
             return SizedBox();
           },

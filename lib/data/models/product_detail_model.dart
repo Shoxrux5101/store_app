@@ -21,6 +21,29 @@ class ProductDetailModel {
     required this.rating,
   });
 
+  ProductDetailModel copyWith({
+    bool? isLiked,
+    String? title,
+    String? description,
+    double? price,
+    List<ProductDetailImageModel>? productImages,
+    List<ProductDetailSizeModel>? productSizes,
+    int? reviewsCount,
+    double? rating,
+  }) {
+    return ProductDetailModel(
+      id: id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      price: price ?? this.price,
+      isLiked: isLiked ?? this.isLiked,
+      productImages: productImages ?? this.productImages,
+      productSizes: productSizes ?? this.productSizes,
+      reviewsCount: reviewsCount ?? this.reviewsCount,
+      rating: rating ?? this.rating,
+    );
+  }
+
   factory ProductDetailModel.fromJson(Map<String, dynamic> json) {
     return ProductDetailModel(
       id: json['id'],

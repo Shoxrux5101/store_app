@@ -19,10 +19,10 @@ class _NewAddressPageState extends State<NewAddressPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("New Address"),
+        title: Text("New Address",style: TextStyle(fontSize: 24,fontWeight: FontWeight.w600),),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.close),
+          icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
       ),

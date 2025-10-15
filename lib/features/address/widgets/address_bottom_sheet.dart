@@ -108,7 +108,7 @@ class _AddressBottomSheetState extends State<AddressBottomSheet> {
               onPressed: () {
                 final newAddress = Address(
                   id: DateTime.now().millisecondsSinceEpoch,
-                  title: nickname!,
+                  nickname: nickname!,
                   fullAddress: addressController.text,
                   isDefault: isDefault,
                   lat: widget.latitude,

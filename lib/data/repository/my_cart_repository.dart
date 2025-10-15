@@ -24,7 +24,6 @@ class MyCartRepository {
       },
     );
   }
-
   Future<Result<MyCartItemModel>> addToMyCart(int productId, int sizeId) async {
     final response = await _apiClient.post('/cart-items', data: {
       "productId": productId,

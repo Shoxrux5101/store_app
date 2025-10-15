@@ -36,7 +36,7 @@ class _AddressNicknameDropdownState extends State<AddressNicknameDropdown> {
   void _showDropdownMenu() async {
     final result = await showMenu<String>(
       context: context,
-      position: RelativeRect.fromLTRB(100, 400, 100, 0), // joylashuv
+      position: RelativeRect.fromLTRB(100, 400, 100, 0),
       items: widget.items
           .map((e) => PopupMenuItem<String>(
         value: e,

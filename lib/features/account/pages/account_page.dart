@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:store_app/features/account/faq/page/f_a_qs.dart';
-import 'package:store_app/features/account/pages/my_orders.dart';
 import 'package:store_app/features/account/widgets/account_item.dart';
 import 'package:store_app/features/account/widgets/logout_dialog.dart';
 import '../../../core/routes/routes.dart';
 import '../../card/pages/cards_screen.dart';
 import '../../help_center/page/help_center.dart';
 import '../../my_details/pages/my_details.dart';
+import '../../my_order/page/my_order_screen.dart';
 import 'notifications_settings_page.dart';
 
 class AccountPage extends StatefulWidget {
@@ -55,7 +55,7 @@ class _AccountPageState extends State<AccountPage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => MyOrders()),
+                      MaterialPageRoute(builder: (context) => MyOrderScreen()),
                     );
                   },
                 ),

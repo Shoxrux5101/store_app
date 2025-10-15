@@ -7,17 +7,18 @@ import 'product_state.dart';
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final ProductRepository repository;
 
-  ProductBloc({required this.repository}) : super(const ProductInitial()) {
+  ProductBloc({required this.repository}) : super(ProductInitial()) {
     on<GetAllProductsEvent>(_onGetAllProducts);
     on<GetProductsByCategoryEvent>(_onGetProductsByCategory);
     on<SearchProductsEvent>(_onSearchProducts);
     on<GetProductsByPriceRangeEvent>(_onGetProductsByPriceRange);
     on<SortProductsEvent>(_onSortProducts);
     on<ClearFiltersEvent>(_onClearFilters);
+    on<ToggleLikeEvent>(_onToggleLike);
   }
 
   Future<void> _onGetAllProducts(GetAllProductsEvent event, Emitter<ProductState> emit) async {
-    emit(const ProductLoading());
+    emit(ProductLoading());
     final result = await repository.getAllProducts();
     result.fold(
           (error) => emit(ProductError(error.toString())),
@@ -26,95 +27,80 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   }
 
   Future<void> _onGetProductsByCategory(GetProductsByCategoryEvent event, Emitter<ProductState> emit) async {
-    emit(const ProductLoading());
+    emit(ProductLoading());
     final result = await repository.getProductsByCategory(event.categoryId);
     result.fold(
           (error) => emit(ProductError(error.toString())),
-          (success) => emit(ProductLoaded(success, categoryId: event.categoryId)),
+          (success) => emit(ProductLoaded(success)),
     );
   }
 
   Future<void> _onSearchProducts(SearchProductsEvent event, Emitter<ProductState> emit) async {
-    emit(const ProductLoading());
+    emit(ProductLoading());
     final result = await repository.searchProducts(event.title);
     result.fold(
           (error) => emit(ProductError(error.toString())),
-          (success) => emit(ProductLoaded(success, title: event.title)),
+          (success) => emit(ProductLoaded(success)),
     );
   }
 
   Future<void> _onGetProductsByPriceRange(GetProductsByPriceRangeEvent event, Emitter<ProductState> emit) async {
-    emit(const ProductLoading());
-    final result = await repository.getProductsByPriceRange(minPrice: event.minPrice, maxPrice: event.maxPrice);
+    emit(ProductLoading());
+    final result = await repository.getProductsByPriceRange(
+      minPrice: event.minPrice,
+      maxPrice: event.maxPrice,
+    );
     result.fold(
           (error) => emit(ProductError(error.toString())),
-          (success) => emit(ProductLoaded(success, minPrice: event.minPrice, maxPrice: event.maxPrice)),
+          (success) => emit(ProductLoaded(success)),
     );
   }
 
   Future<void> _onSortProducts(SortProductsEvent event, Emitter<ProductState> emit) async {
     final current = state;
-    List<ProductModel> products = [];
-    int? categoryId;
-    String? title;
-    double? minPrice;
-    double? maxPrice;
-
     if (current is ProductLoaded) {
-      products = List.from(current.products);
-      categoryId = current.categoryId;
-      title = current.title;
-      minPrice = current.minPrice;
-      maxPrice = current.maxPrice;
-    } else {
-      emit(const ProductLoading());
-      final res = await repository.getAllProducts();
-      var handled = false;
-      res.fold(
-            (error) => emit(ProductError(error.toString())),
-            (success) {
-          products = success;
-          handled = true;
-        },
-      );
-      if (!handled) return;
+      List<ProductModel> sorted = List.from(current.products);
+      switch (event.sortType) {
+        case 'price_low_high':
+          sorted.sort((a, b) => a.price.compareTo(b.price));
+          break;
+        case 'price_high_low':
+          sorted.sort((a, b) => b.price.compareTo(a.price));
+          break;
+        case 'name_a_z':
+          sorted.sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
+          break;
+        case 'name_z_a':
+          sorted.sort((a, b) => b.title.toLowerCase().compareTo(a.title.toLowerCase()));
+          break;
+        case 'discount':
+          sorted.sort((a, b) => b.discount.compareTo(a.discount));
+          break;
+      }
+      emit(current.copyWith(products: sorted));
     }
-
-    List<ProductModel> sorted = List<ProductModel>.from(products);
-    switch (event.sortType) {
-      case 'price_low_high':
-        sorted.sort((a, b) => a.price.compareTo(b.price));
-        break;
-      case 'price_high_low':
-        sorted.sort((a, b) => b.price.compareTo(a.price));
-        break;
-      case 'name_a_z':
-        sorted.sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
-        break;
-      case 'name_z_a':
-        sorted.sort((a, b) => b.title.toLowerCase().compareTo(a.title.toLowerCase()));
-        break;
-      case 'discount':
-        sorted.sort((a, b) => b.discount.compareTo(a.discount));
-        break;
-    }
-
-    emit(ProductLoaded(
-      List<ProductModel>.from(sorted),
-      sort: event.sortType,
-      categoryId: categoryId,
-      title: title,
-      minPrice: minPrice,
-      maxPrice: maxPrice,
-    ));
   }
 
   Future<void> _onClearFilters(ClearFiltersEvent event, Emitter<ProductState> emit) async {
-    emit(const ProductLoading());
+    emit(ProductLoading());
     final result = await repository.getAllProducts();
     result.fold(
           (error) => emit(ProductError(error.toString())),
           (success) => emit(ProductLoaded(success)),
     );
+  }
+
+  Future<void> _onToggleLike(ToggleLikeEvent event, Emitter<ProductState> emit) async {
+    if (state is ProductLoaded) {
+      final currentState = state as ProductLoaded;
+      final updatedProducts = currentState.products.map((product) {
+        if (product.id == event.productId) {
+          return product.copyWith(isLiked: event.isLiked);
+        }
+        return product;
+      }).toList();
+      emit(currentState.copyWith(products: updatedProducts));
+      await repository.toggleLike(event.productId, event.isLiked);
+    }
   }
 }

@@ -23,7 +23,6 @@ class SearchProductsEvent extends ProductEvent {
   @override
   List<Object?> get props => [title];
 }
-
 class GetProductsByPriceRangeEvent extends ProductEvent {
   final double minPrice;
   final double maxPrice;

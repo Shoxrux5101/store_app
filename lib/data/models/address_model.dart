@@ -1,16 +1,16 @@
 import 'package:equatable/equatable.dart';
 
 class Address extends Equatable {
-  final int id;
-  final String title;
+  final int? id;
+  final String nickname;
   final String fullAddress;
   final double lat;
   final double lng;
   final bool isDefault;
 
   const Address({
-    required this.id,
-    required this.title,
+    this.id,
+    required this.nickname,
     required this.fullAddress,
     required this.lat,
     required this.lng,
@@ -19,19 +19,18 @@ class Address extends Equatable {
 
   factory Address.fromJson(Map<String, dynamic> json) {
     return Address(
-      id: json['id'] as int,
-      title: json['title'] as String,
-      fullAddress: json['fullAddress'] as String,
-      lat: (json['lat'] as num).toDouble(),
-      lng: (json['lng'] as num).toDouble(),
-      isDefault: json['isDefault'] as bool,
+      id: json['id'],
+      nickname: json['nickname'] ?? "",
+      fullAddress: json['fullAddress'] ?? "",
+      lat: (json['lat'] ?? 0).toDouble(),
+      lng: (json['lng'] ?? 0).toDouble(),
+      isDefault: json['isDefault'] ?? false,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "id": id,
-      "title": title,
+      "nickname": nickname,
       "fullAddress": fullAddress,
       "lat": lat,
       "lng": lng,
@@ -40,5 +39,5 @@ class Address extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, title, fullAddress, lat, lng, isDefault];
+  List<Object?> get props => [id, nickname, fullAddress, lat, lng, isDefault];
 }

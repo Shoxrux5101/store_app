@@ -18,6 +18,7 @@ class CartItemsList extends StatelessWidget {
         itemBuilder: (context, index) {
           final item = cart.items[index];
           return Container(
+            key: ValueKey(item.id),
             margin: const EdgeInsets.only(bottom: 16),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -45,7 +46,6 @@ class CartItemsList extends StatelessWidget {
                       : null,
                 ),
                 const SizedBox(width: 16),
-
                 // Ma'lumotlar
                 Expanded(
                   child: Column(
@@ -104,14 +104,14 @@ class CartItemsList extends StatelessWidget {
                     // QUANTITY controls
                     Row(
                       children: [
-                        // MINUS tugmasi - TO'G'RI!
+                        // MINUS tugmasi
                         GestureDetector(
                           onTap: () {
                             if (item.quantity > 1) {
                               context.read<MyCartBloc>().add(
                                 UpdateMyCartQuantity(
                                   itemId: item.id,
-                                  quantity: item.quantity - 1, // Kamaytirish
+                                  quantity: item.quantity - 1,
                                 ),
                               );
                             }
@@ -136,8 +136,7 @@ class CartItemsList extends StatelessWidget {
                             ),
                           ),
                         ),
-
-                        // Quantity ko'rsatish
+                        // Quantity ko‘rsatish
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Text(
@@ -148,14 +147,13 @@ class CartItemsList extends StatelessWidget {
                             ),
                           ),
                         ),
-
-                        // PLUS tugmasi - TO'G'RI!
+                        // PLUS tugmasi
                         GestureDetector(
                           onTap: () {
                             context.read<MyCartBloc>().add(
                               UpdateMyCartQuantity(
                                 itemId: item.id,
-                                quantity: item.quantity + 1, // Oshirish
+                                quantity: item.quantity + 1,
                               ),
                             );
                           },

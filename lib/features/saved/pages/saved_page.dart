@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:store_app/data/models/saved_item_model.dart';
-import 'package:store_app/features/home/widgets/custom_bottom_nav_bar.dart';
 import '../../../core/routes/routes.dart';
 import '../managers/saved_bloc.dart';
 import '../managers/saved_event.dart';
@@ -104,7 +103,7 @@ class _SavedPageState extends State<SavedPage> {
                           Positioned(
                             top: 8,
                             right: 8,
-                            child: FavouriteButton(product: item.toProductModel()),
+                            child: FavouriteButton(size: 18,iconSize:16,product: item.toProductModel()),
                           ),
                         ],
                       ),

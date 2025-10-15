@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:store_app/features/address/page/new_address_page.dart';
+import 'package:store_app/features/home/widgets/cutom_app_bar.dart';
 
+import '../../../core/routes/routes.dart';
 import '../managers/address_bloc.dart';
 import '../managers/address_event.dart';
 import '../managers/address_state.dart';
@@ -26,16 +29,7 @@ class _AddressPageState extends State<AddressPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Address"),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications_none),
-            onPressed: () {},
-          ),
-        ],
-      ),
+      appBar: CustomAppBar(title: "Address"),
       body: Padding(
         padding: EdgeInsets.all(16),
         child: Column(
@@ -55,7 +49,6 @@ class _AddressPageState extends State<AddressPage> {
                     return Center(child: CircularProgressIndicator());
                   } else if (state is AddressLoaded) {
                     final addresses = state.addresses;
-
                     if (addresses.isEmpty) {
                       return Center(child: Text("No addresses found"));
                     }
@@ -75,7 +68,7 @@ class _AddressPageState extends State<AddressPage> {
                             leading: Icon(Icons.location_on_outlined),
                             title: Row(
                               children: [
-                                Text(item.title,
+                                Text(item.nickname,
                                     style: TextStyle(fontWeight: FontWeight.bold)),
                                 if (isDefaultDisplay)
                                   Container(
@@ -93,7 +86,7 @@ class _AddressPageState extends State<AddressPage> {
                               ],
                             ),
                             subtitle: Text(item.fullAddress),
-                            trailing: Radio<int>(
+                            trailing: Radio<int?>(
                               value: item.id,
                               groupValue: selectedId,
                               onChanged: (val) {
@@ -141,7 +134,22 @@ class _AddressPageState extends State<AddressPage> {
               child: ElevatedButton(
                 onPressed: () {
                   if (selectedId != null) {
-                    print("selected id: $selectedId");
+                    final state = context.read<AddressBloc>().state;
+                    if (state is AddressLoaded) {
+                      final selectedAddress = state.addresses
+                          .firstWhere((addr) => addr.id == selectedId);
+                      context.push(
+                        Routes.checkOut,
+                        extra: {
+                          'subtotal': 0.0,
+                          'address': selectedAddress,
+                        },
+                      );
+                    }
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Please select an address')),
+                    );
                   }
                 },
                 style: ElevatedButton.styleFrom(

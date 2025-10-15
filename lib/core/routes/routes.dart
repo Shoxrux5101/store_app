@@ -13,4 +13,5 @@ class Routes {
   static String productDetail = '/detail';
   static String reviewPage = '/reviewPage';
   static String addressPage = '/addressPage';
+  static String checkOut = '/checkOut';
 }

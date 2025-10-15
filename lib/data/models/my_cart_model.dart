@@ -37,6 +37,22 @@ class MyCartItemModel extends Equatable {
     };
   }
 
+  MyCartItemModel copyWith({
+    List<MyCartProductItem>? items,
+    double? subTotal,
+    double? vat,
+    double? shippingFee,
+    double? total,
+  }) {
+    return MyCartItemModel(
+      items: items ?? this.items,
+      subTotal: subTotal ?? this.subTotal,
+      vat: vat ?? this.vat,
+      shippingFee: shippingFee ?? this.shippingFee,
+      total: total ?? this.total,
+    );
+  }
+
   @override
   List<Object?> get props => [items, subTotal, vat, shippingFee, total];
 }
@@ -82,6 +98,26 @@ class MyCartProductItem extends Equatable {
       'image': image,
       'quantity': quantity,
     };
+  }
+
+  MyCartProductItem copyWith({
+    int? id,
+    int? productId,
+    String? title,
+    String? size,
+    double? price,
+    String? image,
+    int? quantity,
+  }) {
+    return MyCartProductItem(
+      id: id ?? this.id,
+      productId: productId ?? this.productId,
+      title: title ?? this.title,
+      size: size ?? this.size,
+      price: price ?? this.price,
+      image: image ?? this.image,
+      quantity: quantity ?? this.quantity,
+    );
   }
 
   @override

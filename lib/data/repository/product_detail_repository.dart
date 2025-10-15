@@ -24,4 +24,19 @@ class ProductDetailRepository {
       },
     );
   }
+  Future<Result<void>> toggleLike(int productId, bool isLiked) async {
+    try {
+      final response = await _apiClient.post(
+        '/products/toggle-like',
+        data: {'productId': productId, 'isLiked': isLiked},
+      );
+
+      return response.fold(
+            (error) => Result.error(error),
+            (_) => Result.ok(null),
+      );
+    } catch (e) {
+      return Result.error(Exception("Failed to toggle like: $e"));
+    }
+  }
 }

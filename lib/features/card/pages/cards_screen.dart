@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:store_app/core/routes/routes.dart';
 import 'package:store_app/features/home/widgets/custom_button.dart';
+import 'package:store_app/features/home/widgets/cutom_app_bar.dart';
 import '../managers/card_bloc.dart';
 import '../managers/card_event.dart';
 import '../managers/card_state.dart';
@@ -48,13 +51,7 @@ class _CardsScreenState extends State<CardsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Payment Method",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-        ),
-        centerTitle: true,
-      ),
+      appBar: CustomAppBar(title: "Payment Method"),
       body: BlocBuilder<CardBloc, CardState>(
         builder: (context, state) {
           if (state is CardLoading) {
@@ -97,7 +94,7 @@ class _CardsScreenState extends State<CardsScreen> {
                   ),
                   AddCardButton(onTap: _handleAddNewCard),
                   const SizedBox(height: 20),
-                  CustomButton(text: "Apply", onTap: () {}),
+                  CustomButton(text: "Apply", onTap: () {context.push(Routes.checkOut);}),
                 ],
               ),
             );

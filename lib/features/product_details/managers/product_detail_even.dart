@@ -9,3 +9,9 @@ class LoadProductDetailReviews extends ProductDetailEvent {
   final int productId;
   LoadProductDetailReviews(this.productId);
 }
+
+class ToggleLikeDetailEvent extends ProductDetailEvent {
+  final int productId;
+  final bool isLiked;
+  ToggleLikeDetailEvent(this.productId, this.isLiked);
+}

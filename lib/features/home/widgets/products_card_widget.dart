@@ -69,7 +69,7 @@ class ProductCard extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.only(right: 8,top: 8,left: 148),
-                    child: FavouriteButton(product: product),
+                    child: FavouriteButton(product: product, size: 18,iconSize: 17,),
                   ),
                   if (hasDiscount)
                     Positioned(

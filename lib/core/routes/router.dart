@@ -1,12 +1,17 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:store_app/core/routes/routes.dart';
 import 'package:store_app/features/account/pages/account_page.dart';
 import 'package:store_app/features/address/page/address_page.dart';
+import 'package:store_app/features/checkout/page/checkout_screen.dart';
 import 'package:store_app/features/my_cart/pages/my_cart_page.dart';
+import 'package:store_app/features/my_cart/widgets/checkout%20-widget.dart';
 import 'package:store_app/features/product_details/pages/product_detail_page.dart';
 import 'package:store_app/features/review/pages/review_page.dart';
 import 'package:store_app/features/saved/pages/saved_page.dart';
 import 'package:store_app/features/search/pages/search_page.dart';
+import '../../data/models/address_model.dart';
+import '../../features/checkout/managers/checkout_bloc.dart';
 import '../../features/forgot_password/pages/forgot_password_page.dart';
 import '../../features/home/pages/home_page.dart';
 import '../../features/login/pages/login_page.dart';
@@ -44,6 +49,30 @@ class AppRouter {
         builder: (context, state) {
           final productId = state.extra as int;
           return ReviewPage(productId: productId);
+        },
+      ),
+      GoRoute(
+        path: Routes.checkOut,
+        builder: (context, state) {
+          double subtotal = 0.0;
+          Address? address;
+          if (state.extra is double) {
+            subtotal = state.extra as double;
+          } else if (state.extra is Map<String, dynamic>) {
+            final extra = state.extra as Map<String, dynamic>;
+            subtotal = (extra['subtotal'] as double?) ?? 0.0;
+            address = extra['address'] as Address?;
+          }
+
+          return BlocProvider(
+            create: (context) => CheckoutBloc(
+              repository: context.read(),
+            ),
+            child: CheckoutScreen(
+              subtotal: subtotal,
+              initialAddress: address,
+            ),
+          );
         },
       ),
       GoRoute(path: Routes.splash, builder: (context, state) => Splash()),
