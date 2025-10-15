@@ -1,3 +1,5 @@
+
+// ============ BLOC ============
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../data/repository/card_item_repository.dart';
 import 'card_event.dart';
@@ -35,7 +37,11 @@ class CardBloc extends Bloc<CardEvent, CardState> {
       ) async {
     emit(const CardAdding());
 
-    final result = await _repository.addCard(event.cardNumber);
+    final result = await _repository.addCard(
+      cardNumber: event.cardNumber,
+      expiryDate: event.expiryDate,
+      securityCode: event.securityCode,
+    );
 
     result.fold(
           (error) => emit(CardError(error.toString())),
@@ -70,8 +76,10 @@ class CardBloc extends Bloc<CardEvent, CardState> {
     emit(const CardUpdating());
 
     final result = await _repository.updateCard(
-      event.cardId,
-      event.cardNumber,
+      cardId: event.cardId,
+      cardNumber: event.cardNumber,
+      expiryDate: event.expiryDate,
+      securityCode: event.securityCode,
     );
 
     result.fold(

@@ -35,33 +35,32 @@ class ProductRepository {
     if (orderBy != null && orderBy.isNotEmpty) {
       queryParams['OrderBy'] = orderBy;
     }
-    final response = await _apiClient.get(
-      '/products/list',
-      queryParams: queryParams,
-    );
+
+    final response = await _apiClient.get('/products/list', queryParams: queryParams);
+
     return response.fold(
           (error) => Result.error(error),
           (success) {
-        try {
-          final data = (success as List)
-              .map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
-              .toList();
-          return Result.ok(data);
-        } catch (e) {
-          return Result.error(Exception('Failed to parse products: $e'));
-        }
+        final data = (success as List)
+            .map((e) => ProductModel.fromJson(e))
+            .toList();
+        return Result.ok(data);
       },
     );
   }
+
   Future<Result<List<ProductModel>>> getAllProducts() async {
     return getProducts();
   }
+
   Future<Result<List<ProductModel>>> getProductsByCategory(int categoryId) async {
     return getProducts(categoryId: categoryId);
   }
+
   Future<Result<List<ProductModel>>> searchProducts(String title) async {
     return getProducts(title: title);
   }
+
   Future<Result<List<ProductModel>>> getProductsByPriceRange({
     required double minPrice,
     required double maxPrice,

@@ -10,9 +10,9 @@ import '../../../data/repository/category_repository.dart';
 import '../../../data/repository/product_repository.dart';
 import '../../../data/repository/saved_repository.dart';
 import '../managers/home_cubit.dart';
-import '../managers/product_cubit.dart';
+import '../managers/product_bloc.dart';
+import '../managers/product_event.dart';
 import '../widgets/category_tabs_widget.dart';
-import '../widgets/custom_bottom_nav_bar.dart';
 import '../widgets/products_grid_widget.dart';
 import '../widgets/search_bar_widget.dart';
 
@@ -24,6 +24,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late final ProductRepository _productRepository;
+  late final SavedRepository _savedRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -34,42 +36,34 @@ class _HomePageState extends State<HomePage> {
             CategoryRepository(
               apiClient: ApiClient(
                 interceptor: AuthInterceptor(
-                  secureStorage: const FlutterSecureStorage(),
+                  secureStorage: FlutterSecureStorage(),
                 ),
               ),
             ),
           )..fetchCategories(),
         ),
         BlocProvider(
-          create: (BuildContext context) => ProductCubit(
-            ProductRepository(
+          create: (BuildContext context) => ProductBloc(
+            repository: ProductRepository(
               apiClient: ApiClient(
                 interceptor: AuthInterceptor(
-                  secureStorage: const FlutterSecureStorage(),
+                  secureStorage: FlutterSecureStorage(),
                 ),
               ),
             ),
-            SavedRepository(
-              apiClient: ApiClient(
-                interceptor: AuthInterceptor(
-                  secureStorage: const FlutterSecureStorage(),
-                ),
-              ),
-            ),
-          )..fetchProducts(),
+          )..add(GetAllProductsEvent()),
         ),
-
       ],
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
           title: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: EdgeInsets.symmetric(horizontal: 24),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   "Discover",
                   style: TextStyle(
                     fontSize: 32,
@@ -77,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {context.push(Routes.notification);},
+                  onPressed: () => context.push(Routes.notification),
                   icon: SvgPicture.asset("assets/icons/Bell.svg"),
                 ),
               ],
@@ -85,9 +79,9 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16.0),
           child: Column(
-            children: const [
+            children: [
               SearchBarWidget(),
               SizedBox(height: 16),
               CategoryTabsWidget(),

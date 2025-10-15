@@ -5,7 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:store_app/data/repository/product_repository.dart';
 import '../../../core/routes/routes.dart';
 import '../../../data/repository/saved_repository.dart';
-import '../../home/managers/product_cubit.dart';
+import '../../home/managers/product_bloc.dart';
+import '../../home/managers/product_event.dart';
 import '../../home/managers/product_state.dart';
 import '../../home/widgets/custom_bottom_nav_bar.dart';
 import '../widgets/recent_searches_widget.dart';
@@ -13,14 +14,13 @@ import '../widgets/search_results_widget.dart';
 import '../widgets/custom_search_bar.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+  SearchPage({super.key});
 
   @override
   State<SearchPage> createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
-
   final TextEditingController _controller = TextEditingController();
   final List<String> _recent = [
     'Jeans',
@@ -60,17 +60,19 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ProductCubit(context.read<ProductRepository>(),context.read<SavedRepository>(),)..fetchProducts(),
+      create: (context) =>
+      ProductBloc(repository: context.read<ProductRepository>())
+        ..add(GetAllProductsEvent()),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Search"),
+          title: Text("Search"),
           centerTitle: true,
           actions: [
             IconButton(
               onPressed: () {
                 context.push(Routes.notification);
               },
-              icon:SvgPicture.asset('assets/icons/Bell.svg'),
+              icon: SvgPicture.asset('assets/icons/Bell.svg'),
             ),
           ],
         ),
@@ -82,37 +84,40 @@ class _SearchPageState extends State<SearchPage> {
                 onSearch: (term) {
                   if (term.trim().isEmpty) return;
                   _addToRecent(term);
-                  context.read<ProductCubit>().searchProducts(term);
+                  context.read<ProductBloc>().add(SearchProductsEvent(term));
                 },
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: BlocBuilder<ProductCubit, ProductState>(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: BlocBuilder<ProductBloc, ProductState>(
                     builder: (context, state) {
-                      if ((state.searchQuery?.isEmpty ?? true)) {
+                      if (state is ProductInitial ||
+                          (state is ProductLoaded &&
+                              state.products.isEmpty)) {
                         return RecentSearchesWidget(
                           recent: _recent,
                           onTap: (term) {
                             _controller.text = term;
-                            context.read<ProductCubit>().searchProducts(term);
+                            context
+                                .read<ProductBloc>()
+                                .add(SearchProductsEvent(term));
                           },
                           onRemove: _removeRecentAt,
                           onClearAll: _clearAllRecent,
                         );
-                      }
-                      if (state.status == ProductStatus.loading) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                      if (state.status == ProductStatus.error) {
-                        return Center(
-                          child: Text(state.errorMassage ?? "Something went wrong"),
+                      } else if (state is ProductLoading) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (state is ProductError) {
+                        return Center(child: Text(state.error));
+                      } else if (state is ProductLoaded) {
+                        return SearchResultsWidget(
+                          results: state.products,
+                          onTap: (p) => _addToRecent(p.title),
                         );
+                      } else {
+                        return Center(child: Text("No products found"));
                       }
-                      return SearchResultsWidget(
-                        results: state.filterProducts,
-                        onTap: (p) => _addToRecent(p.title),
-                      );
                     },
                   ),
                 ),

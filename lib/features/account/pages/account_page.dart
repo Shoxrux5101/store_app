@@ -5,8 +5,8 @@ import 'package:store_app/features/account/faq/page/f_a_qs.dart';
 import 'package:store_app/features/account/pages/my_orders.dart';
 import 'package:store_app/features/account/widgets/account_item.dart';
 import 'package:store_app/features/account/widgets/logout_dialog.dart';
-import 'package:store_app/features/home/widgets/custom_bottom_nav_bar.dart';
 import '../../../core/routes/routes.dart';
+import '../../card/pages/cards_screen.dart';
 import '../../help_center/page/help_center.dart';
 import '../../my_details/pages/my_details.dart';
 import 'notifications_settings_page.dart';
@@ -100,10 +100,10 @@ class _AccountPageState extends State<AccountPage> {
                   iconPath: 'assets/icons/Card.svg',
                   title: "Payment Methods",
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => MyDetails()),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CardsScreen()),
+                    );
                   },
                 ),
                 Padding(

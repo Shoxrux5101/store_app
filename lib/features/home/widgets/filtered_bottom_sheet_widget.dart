@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../managers/product_cubit.dart';
+import '../managers/product_bloc.dart';
+import '../managers/product_event.dart';
 import '../managers/product_state.dart';
 
 class FilterBottomSheet extends StatelessWidget {
-  const FilterBottomSheet({Key? key}) : super(key: key);
+  FilterBottomSheet({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20),
       height: MediaQuery.of(context).size.height * 0.6,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildHeader(context),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           _buildSortSection(),
-          const Spacer(),
+          Spacer(),
           _buildActionButtons(context),
         ],
       ),
@@ -28,7 +29,7 @@ class FilterBottomSheet extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text(
+        Text(
           'Filters',
           style: TextStyle(
             fontSize: 20,
@@ -37,7 +38,7 @@ class FilterBottomSheet extends StatelessWidget {
         ),
         IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.close),
+          icon: Icon(Icons.close),
         ),
       ],
     );
@@ -47,23 +48,28 @@ class FilterBottomSheet extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Sort By',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 10),
-        BlocBuilder<ProductCubit, ProductState>(
+        SizedBox(height: 10),
+        BlocBuilder<ProductBloc, ProductState>(
           builder: (context, state) {
+            String? currentSort;
+            if (state is ProductLoaded) {
+              currentSort = state.sort;
+            }
+
             return Column(
               children: [
-                _buildSortOption(context, 'Price: Low to High', 'price_low_high', state.sort),
-                _buildSortOption(context, 'Price: High to Low', 'price_high_low', state.sort),
-                _buildSortOption(context, 'Name: A to Z', 'name_a_z', state.sort),
-                _buildSortOption(context, 'Name: Z to A', 'name_z_a', state.sort),
-                _buildSortOption(context, 'Discount', 'discount', state.sort),
+                _buildSortOption(context, 'Price: Low to High', 'price_low_high', currentSort),
+                _buildSortOption(context, 'Price: High to Low', 'price_high_low', currentSort),
+                _buildSortOption(context, 'Name: A to Z', 'name_a_z', currentSort),
+                _buildSortOption(context, 'Name: Z to A', 'name_z_a', currentSort),
+                _buildSortOption(context, 'Discount', 'discount', currentSort),
               ],
             );
           },
@@ -83,11 +89,9 @@ class FilterBottomSheet extends StatelessWidget {
           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
         ),
       ),
-      trailing: isSelected
-          ? const Icon(Icons.check, color: Colors.black)
-          : null,
+      trailing: isSelected ? Icon(Icons.check, color: Colors.black) : null,
       onTap: () {
-        context.read<ProductCubit>().sortProducts(value);
+        context.read<ProductBloc>().add(SortProductsEvent(value));
       },
     );
   }
@@ -98,17 +102,17 @@ class FilterBottomSheet extends StatelessWidget {
         Expanded(
           child: OutlinedButton(
             onPressed: () {
-              context.read<ProductCubit>().clearFilters();
+              context.read<ProductBloc>().add(ClearFiltersEvent());
               Navigator.pop(context);
             },
             style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              side: const BorderSide(color: Colors.grey),
+              padding: EdgeInsets.symmetric(vertical: 16),
+              side: BorderSide(color: Colors.grey),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: const Text(
+            child: Text(
               'Clear All',
               style: TextStyle(
                 color: Colors.black,
@@ -117,7 +121,7 @@ class FilterBottomSheet extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 16),
+        SizedBox(width: 16),
         Expanded(
           child: ElevatedButton(
             onPressed: () {
@@ -126,12 +130,12 @@ class FilterBottomSheet extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.black,
               foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: const Text(
+            child: Text(
               'Apply',
               style: TextStyle(
                 fontWeight: FontWeight.bold,

@@ -8,7 +8,7 @@ class MyCartRepository {
   MyCartRepository({required ApiClient apiClient}) : _apiClient = apiClient;
 
   Future<Result<MyCartItemModel>> getMyCart() async {
-    final response = await _apiClient.get('/my-cart/my-cart-items');
+    final response = await _apiClient.get('/cart-items');
     // print('++++++++++++++');
     // print(response);
     // print('++++++++++++++');
@@ -26,7 +26,7 @@ class MyCartRepository {
   }
 
   Future<Result<MyCartItemModel>> addToMyCart(int productId, int sizeId) async {
-    final response = await _apiClient.post('/my-cart/add-item', data: {
+    final response = await _apiClient.post('/cart-items', data: {
       "productId": productId,
       "sizeId": sizeId
     },);
@@ -44,12 +44,12 @@ class MyCartRepository {
   }
 
   Future<Result<MyCartItemModel>> removeFromMyCart(int id) async {
-    final response = await _apiClient.delete('/my-cart/delete/$id');
+    final response = await _apiClient.delete('/cart-items/$id');
 
     return response.fold(
           (error) => Result.error(error),
           (success) async {
-        final cartResponse = await _apiClient.get('/my-cart/my-cart-items');
+        final cartResponse = await _apiClient.get('/cart-items');
         return cartResponse.fold(
               (error) => Result.error(error),
               (cartData) {
@@ -70,7 +70,7 @@ class MyCartRepository {
     required int quantity,
   }) async {
     final response = await _apiClient.patch(
-      '/my-cart/update-quantity/$itemId',
+      '/cart-items/$itemId',
       data: {'quantity': quantity},
     );
 

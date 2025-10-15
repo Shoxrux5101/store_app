@@ -1,82 +1,71 @@
 import 'package:equatable/equatable.dart';
-import 'package:store_app/data/models/product_model.dart';
+import '../../../data/models/product_model.dart';
 
-enum ProductStatus { idle, loading, success, error }
+abstract class ProductState extends Equatable {
+  const ProductState();
+  @override
+  List<Object?> get props => [];
+}
 
-class ProductState extends Equatable {
-  final ProductStatus status;
+class ProductInitial extends ProductState {
+  const ProductInitial();
+}
+
+class ProductLoading extends ProductState {
+  const ProductLoading();
+}
+
+class ProductLoaded extends ProductState {
   final List<ProductModel> products;
-  final List<ProductModel> filterProducts;
-  final String? errorMassage;
-  final int? selectedCategoryId;
-  final String? searchQuery;
-  final double? maxPrice;
-  final double? minPrice;
+  final List<ProductModel>? filteredProducts;
   final String? sort;
+  final int? categoryId;
+  final String? title;
+  final double? minPrice;
+  final double? maxPrice;
 
-  const ProductState({
-    required this.status,
-    required this.products,
-    required this.filterProducts,
-    this.errorMassage,
-    this.selectedCategoryId,
-    this.searchQuery,
-    this.maxPrice,
-    this.minPrice,
-    this.sort,
-  });
+  const ProductLoaded(
+      this.products, {
+        this.filteredProducts,
+        this.sort,
+        this.categoryId,
+        this.title,
+        this.minPrice,
+        this.maxPrice,
+      });
 
-  factory ProductState.initial() => const ProductState(
-    status: ProductStatus.idle,
-    products: [],
-    filterProducts: [],
-    errorMassage: null,
-    selectedCategoryId: null,
-    searchQuery: null,
-    maxPrice: null,
-    minPrice: null,
-    sort: null,
-  );
-
-  ProductState copyWith({
-    ProductStatus? status,
+  ProductLoaded copyWith({
     List<ProductModel>? products,
-    List<ProductModel>? filterProducts,
-    String? errorMassage,
-    int? selectedCategoryId,
-    String? searchQuery,
-    double? maxPrice,
-    double? minPrice,
+    List<ProductModel>? filteredProducts,
     String? sort,
-    bool clearError = false,
-    bool clearCategoryId = false,
-    bool clearSearch = false,
-    bool clearPriceRange = false,
-    bool clearSort = false,
+    int? categoryId,
+    String? title,
+    double? minPrice,
+    double? maxPrice,
   }) {
-    return ProductState(
-      status: status ?? this.status,
-      products: products ?? this.products,
-      filterProducts: filterProducts ?? this.filterProducts,
-      errorMassage: clearError ? null : errorMassage ?? this.errorMassage,
-      selectedCategoryId: clearCategoryId ? null : selectedCategoryId ?? this.selectedCategoryId,
-      searchQuery: clearSearch ? null : searchQuery ?? this.searchQuery,
-      maxPrice: clearPriceRange ? null : maxPrice ?? this.maxPrice,
-      minPrice: clearPriceRange ? null : minPrice ?? this.minPrice,
-      sort: clearSort ? null : sort ?? this.sort,
+    return ProductLoaded(
+      products ?? this.products,
+      filteredProducts: filteredProducts ?? this.filteredProducts,
+      sort: sort ?? this.sort,
+      categoryId: categoryId ?? this.categoryId,
+      title: title ?? this.title,
+      minPrice: minPrice ?? this.minPrice,
+      maxPrice: maxPrice ?? this.maxPrice,
     );
   }
 
   @override
-  List<Object?> get props => [
-    status,
-    products,
-    filterProducts,
-    errorMassage,
-    selectedCategoryId,
-    searchQuery,
-    maxPrice,
-    minPrice,
-    sort,
-  ];
+  List<Object?> get props =>
+      [products, filteredProducts, sort, categoryId, title, minPrice, maxPrice];
+}
+
+class ProductError extends ProductState {
+  final String message;
+  const ProductError(this.message);
+
+  String get error => message;
+  String get errorMassage => message;
+
+  @override
+  List<Object?> get props => [message];
 }

@@ -8,7 +8,7 @@ class AddressRepository {
   AddressRepository({required ApiClient apiClient}) : _apiClient = apiClient;
 
   Future<Result<List<Address>>> getAddresses() async {
-    final response = await _apiClient.get('/addresses/list');
+    final response = await _apiClient.get('/addresses');
 
     return response.fold(
           (error) => Result.error(error),

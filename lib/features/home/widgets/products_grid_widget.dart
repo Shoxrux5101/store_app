@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:store_app/features/home/managers/product_bloc.dart';
+import 'package:store_app/features/home/managers/product_event.dart';
+import 'package:store_app/features/home/managers/product_state.dart';
 import 'package:store_app/features/home/widgets/products_card_widget.dart';
-import '../../../data/models/product_model.dart';
 import '../../product_details/pages/product_detail_page.dart';
-import '../managers/product_cubit.dart';
-import '../managers/product_state.dart';
 
 class ProductsGridWidget extends StatelessWidget {
   const ProductsGridWidget({Key? key}) : super(key: key);
@@ -13,26 +12,27 @@ class ProductsGridWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: BlocBuilder<ProductCubit, ProductState>(
-        builder: (context, productState) {
-          switch (productState.status) {
-            case ProductStatus.loading:
-              return const Center(child: CupertinoActivityIndicator());
-
-            case ProductStatus.success:
-              if (productState.filterProducts.isEmpty) {
-                return _buildEmptyState();
-              }
-              return _buildProductsGrid(productState);
-
-            case ProductStatus.error:
-              return _buildErrorState(context, productState);
-
-            case ProductStatus.idle:
-              return const Center(
-                child: Text("Loading products..."),
-              );
+      child: BlocBuilder<ProductBloc, ProductState>(
+        builder: (context, state) {
+          if (state is ProductLoading) {
+            return const Center(child: CircularProgressIndicator());
           }
+
+          if (state is ProductError) {
+            return _buildErrorState(context, state.message);
+          }
+
+          if (state is ProductLoaded) {
+            final products = state.products;
+
+            if (products.isEmpty) {
+              return _buildEmptyState();
+            }
+
+            return _buildProductsGrid(products);
+          }
+
+          return const Center(child: Text("Loading products..."));
         },
       ),
     );
@@ -51,24 +51,19 @@ class ProductsGridWidget extends StatelessWidget {
           SizedBox(height: 16),
           Text(
             "No products found",
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.grey,
-            ),
+            style: TextStyle(fontSize: 18, color: Colors.grey),
           ),
           SizedBox(height: 8),
           Text(
             "Try adjusting your search or filters",
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey,
-            ),
+            style: TextStyle(fontSize: 14, color: Colors.grey),
           ),
         ],
       ),
     );
   }
-  Widget _buildProductsGrid(ProductState productState) {
+
+  Widget _buildProductsGrid(List products) {
     return GridView.builder(
       padding: const EdgeInsets.only(bottom: 20),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -77,9 +72,9 @@ class ProductsGridWidget extends StatelessWidget {
         crossAxisSpacing: 16,
         mainAxisSpacing: 8,
       ),
-      itemCount: productState.filterProducts.length,
+      itemCount: products.length,
       itemBuilder: (context, index) {
-        final product = productState.filterProducts[index];
+        final product = products[index];
         return GestureDetector(
           onTap: () {
             Navigator.push(
@@ -95,8 +90,7 @@ class ProductsGridWidget extends StatelessWidget {
     );
   }
 
-
-  Widget _buildErrorState(BuildContext context, ProductState productState) {
+  Widget _buildErrorState(BuildContext context, String message) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -108,17 +102,14 @@ class ProductsGridWidget extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            productState.errorMassage ?? "Something went wrong",
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.red,
-            ),
+            message,
+            style: const TextStyle(fontSize: 16, color: Colors.red),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
           ElevatedButton.icon(
             onPressed: () {
-              context.read<ProductCubit>().fetchProducts();
+              context.read<ProductBloc>().add(GetAllProductsEvent());
             },
             icon: const Icon(Icons.refresh),
             label: const Text("Retry"),

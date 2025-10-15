@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../home/managers/product_cubit.dart';
+import '../../home/managers/product_bloc.dart';
+import '../../home/managers/product_event.dart';
 
 class CustomSearchBar extends StatelessWidget {
   final TextEditingController textController;
   final ValueChanged<String> onSearch;
 
-  const CustomSearchBar({
+  CustomSearchBar({
     super.key,
     required this.textController,
     required this.onSearch,
@@ -15,9 +16,9 @@ class CustomSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(16.0),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: EdgeInsets.symmetric(horizontal: 12),
         decoration: BoxDecoration(
           color: Colors.grey[100],
           borderRadius: BorderRadius.circular(12),
@@ -25,24 +26,24 @@ class CustomSearchBar extends StatelessWidget {
         ),
         child: Row(
           children: [
-            const Icon(Icons.search, color: Colors.grey),
-            const SizedBox(width: 8),
+            Icon(Icons.search, color: Colors.grey),
+            SizedBox(width: 8),
             Expanded(
               child: TextField(
                 controller: textController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: "Search for clothes...",
                 ),
                 textInputAction: TextInputAction.search,
                 onChanged: (value) {
-                  context.read<ProductCubit>().searchProducts(value);
+                  context.read<ProductBloc>().add(SearchProductsEvent(value));
                 },
                 onSubmitted: onSearch,
               ),
             ),
             IconButton(
-              icon: const Icon(Icons.mic_none, color: Colors.grey),
+              icon: Icon(Icons.mic_none, color: Colors.grey),
               onPressed: () {},
             ),
           ],

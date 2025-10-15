@@ -12,16 +12,11 @@ import 'package:store_app/data/repository/review_repository.dart';
 import 'package:store_app/data/repository/saved_repository.dart';
 import 'package:store_app/features/address/managers/address_bloc.dart';
 import 'package:store_app/features/address/managers/address_event.dart';
-import 'package:store_app/features/address/managers/address_state.dart';
 import 'package:store_app/features/card/managers/card_bloc.dart';
 import 'package:store_app/features/card/managers/card_event.dart';
 import 'package:store_app/features/chat/managers/chat_bloc.dart';
 import 'package:store_app/features/chat/page/chat_page.dart';
 import 'package:store_app/features/home/managers/category_cubit.dart';
-import 'package:store_app/features/home/managers/product_cubit.dart';
-import 'package:store_app/features/my_details/manager/my_detail_bloc.dart';
-import 'package:store_app/features/my_details/manager/my_detail_event.dart';
-import 'package:store_app/features/my_details/manager/my_detail_state.dart';
 import 'package:store_app/features/notification/managers/notification_bloc.dart';
 import 'package:store_app/features/product_details/managers/product_detail_bloc.dart';
 import 'package:store_app/features/review/managers/review_bloc.dart';
@@ -32,8 +27,12 @@ import '../../data/repository/category_repository.dart';
 import '../../features/sign_up/managers/auth_view_model.dart';
 import '../data/repository/my_cart_repository.dart';
 import '../features/home/managers/home_cubit.dart';
+import '../features/home/managers/product_bloc.dart';
+import '../features/home/managers/product_event.dart';
 import '../features/my_cart/managers/my_cart_bloc.dart';
 import '../features/my_cart/managers/my_cart_event.dart';
+import '../features/my_details/manager/my_detail_bloc.dart';
+import '../features/my_details/manager/my_detail_event.dart';
 import 'authInterceptor.dart';
 import 'network/api_client.dart';
 
@@ -43,7 +42,7 @@ final dependencies = <SingleChildWidget>[
       repository: AuthRepository(
         dioClient: ApiClient(
           interceptor: AuthInterceptor(
-            secureStorage: const FlutterSecureStorage(),
+            secureStorage: FlutterSecureStorage(),
           ),
         ),
       ),
@@ -54,7 +53,7 @@ final dependencies = <SingleChildWidget>[
     create: (context) => CategoryRepository(
       apiClient: ApiClient(
         interceptor: AuthInterceptor(
-          secureStorage: const FlutterSecureStorage(),
+          secureStorage: FlutterSecureStorage(),
         ),
       ),
     ),
@@ -129,6 +128,13 @@ final dependencies = <SingleChildWidget>[
       ),
     ),
   ),
+  Provider(
+    create: (context) => CardRepository(
+      apiClient: ApiClient(
+        interceptor: AuthInterceptor(secureStorage: FlutterSecureStorage()),
+      ),
+    ),
+  ),
 
   BlocProvider(
     create: (context) => HomeCubit(
@@ -159,10 +165,9 @@ final dependencies = <SingleChildWidget>[
     )..add(LoadCards()),
   ),
   BlocProvider(
-    create: (context) => ProductCubit(
-      context.read<ProductRepository>(),
-      context.read<SavedRepository>(),
-    )..fetchProducts(),
+    create: (context) => ProductBloc(
+      repository: context.read<ProductRepository>(),
+    )..add(GetAllProductsEvent()),
   ),
   BlocProvider(
     create: (context) => SavedBloc(
@@ -188,5 +193,6 @@ final dependencies = <SingleChildWidget>[
     create: (context) => ChatBloc(),
     child: ChatPage(),
   ),
+  BlocProvider(create: (context) =>CardBloc(repository: context.read<CardRepository>())..add(LoadCards())),
 
 ];
